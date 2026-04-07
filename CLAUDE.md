@@ -5,15 +5,17 @@ Personal article website. Each article is a hand-crafted React page with unique 
 ## Commands
 
 - `npm run dev` — local dev server (Turbopack)
-- `npm run build` — static export to `out/`
+- `npm run build` — build Next.js app (standalone)
+- `npm run build:worker` — build OpenNext Cloudflare Worker
+- `npm run preview` — build worker + local preview via Wrangler
+- `npm run deploy` — build worker + deploy to Cloudflare Workers
 - `npm run lint` — ESLint
 - `npx shadcn@latest add [component]` — add shadcn/ui component
 - `npx shadcn@latest add "https://magicui.design/r/[component]"` — add Magic UI component
 
 ## Constraints
 
-- **Cloudflare Pages** — static export only (`output: 'export'` in next.config.ts)
-- No server features: no API routes, no ISR, no middleware, no server actions
+- **Cloudflare Workers** via OpenNext (`output: 'standalone'` in next.config.ts)
 - **Dark mode only** — `<html className="dark">` hardcoded in root layout
 - Each article = custom React component (no markdown, no MDX, no CMS)
 - Mobile-responsive required
@@ -21,6 +23,8 @@ Personal article website. Each article is a hand-crafted React page with unique 
 ## Project Structure
 
 ```
+open-next.config.ts   OpenNext configuration (incremental cache, cache interception)
+wrangler.jsonc        Cloudflare Workers config (entry point, assets, compat flags)
 app/
   layout.tsx            Root layout: GeistSans + GeistMono fonts, dark mode, SiteHeader/SiteFooter
   page.tsx              Home page: article grid from getPublishedArticles()
@@ -70,7 +74,7 @@ That's it. Routing (`/a/my-slug`), metadata, OG tags, sitemap, and home page gri
 
 | Package | Purpose |
 |---------|---------|
-| next 15.5.x | Framework, static site generation |
+| next 15.5.x | Framework (standalone mode via OpenNext) |
 | react 19.1.x | UI rendering |
 | tailwindcss v4 | Styling (CSS-first @theme config, OKLCH colors) |
 | motion ^12.38 | Animation engine (`motion/react`, `motion/react-m`) |
@@ -81,6 +85,7 @@ That's it. Routing (`/a/my-slug`), metadata, OG tags, sitemap, and home page gri
 | tw-animate-css | CSS animation utilities |
 | lucide-react | Icons |
 | geist | Typography (GeistSans + GeistMono via next/font) |
+| @opennextjs/cloudflare | Cloudflare Workers adapter for Next.js |
 
 ## Conventions
 

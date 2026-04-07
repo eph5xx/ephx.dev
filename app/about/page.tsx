@@ -61,7 +61,7 @@ export default function AboutPage() {
       </h2>
       <div className="mt-4 space-y-4 leading-relaxed text-muted-foreground">
         <p>
-          I studied software engineering at
+          I studied software engineering at{" "}
           <strong className="text-foreground">
             Far Eastern Federal University
           </strong> and
