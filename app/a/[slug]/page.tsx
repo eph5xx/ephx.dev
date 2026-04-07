@@ -4,7 +4,10 @@ import { articles, articleContent, getArticleBySlug } from "@/lib/articles";
 import { ArticleHeader } from "@/components/articles/article-header";
 import { ReadingProgress } from "@/components/articles/reading-progress";
 
-// Required for static export -- generates all article pages at build time
+// Only serve pre-rendered slugs; unknown slugs get 404 instead of SSR
+export const dynamicParams = false;
+
+// Generates all article pages at build time
 export function generateStaticParams() {
   return articles
     .filter((a) => a.published)
