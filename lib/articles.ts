@@ -16,7 +16,7 @@ export const articles: Article[] = [
     slug: "tweak-idea",
     description:
       "Using multi-agent orchestration to score startup ideas across weighted dimensions.",
-    date: "2026-04-07",
+    date: "2026-04-08",
     published: true,
   },
 ];
