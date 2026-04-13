@@ -15,6 +15,9 @@ export default defineConfig({
     ],
     exclude: ["node_modules/**", ".next/**", ".open-next/**"],
   },
+  esbuild: {
+    jsx: "automatic",
+  },
   resolve: {
     alias: {
       "@": resolve(fileURLToPath(new URL(".", import.meta.url))),
