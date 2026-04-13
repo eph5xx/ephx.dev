@@ -36,6 +36,10 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
+# Wrangler local dev secrets -- never commit
+.dev.vars
+.dev.vars.local
+
 # vercel
 .vercel
 
