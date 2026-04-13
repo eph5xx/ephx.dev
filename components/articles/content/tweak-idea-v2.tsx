@@ -4,6 +4,7 @@ import React, { useRef } from "react";
 import Link from "next/link";
 import { useInView } from "motion/react";
 import * as m from "motion/react-m";
+import { StickyScroll } from "@/components/ui/sticky-scroll-reveal";
 
 function FadeInSection({
   children,
@@ -49,7 +50,7 @@ function PipelineDiagram() {
         viewBox="0 0 1000 310"
         className="h-auto w-full"
         role="img"
-        aria-label="TweakIdea evaluation pipeline: founder profile and raw idea flow through capture, parallel founder fit evaluation, hypothesis extraction and market research, 14 dimension scoring, then report generation."
+        aria-label="Tweak Idea evaluation pipeline: founder profile and raw idea flow through capture, parallel founder fit evaluation, hypothesis extraction and market research, 14 dimension scoring, then report generation."
       >
         <defs>
           <marker
@@ -149,6 +150,111 @@ function PipelineDiagram() {
   );
 }
 
+// --- Commands data for Sticky Scroll Reveal ---
+
+function CommandExample({
+  invocation,
+  output,
+}: {
+  invocation: string;
+  output: string;
+}) {
+  return (
+    <div className="flex h-full flex-col justify-center gap-3 p-5">
+      <pre className="overflow-x-auto rounded-lg bg-background px-4 py-3">
+        <code className="font-mono text-sm leading-relaxed text-foreground whitespace-pre-wrap break-words">
+          {invocation}
+        </code>
+      </pre>
+      <div className="flex items-start gap-2 px-1 text-sm leading-relaxed text-muted-foreground">
+        <span aria-hidden className="shrink-0 text-foreground/60">
+          →
+        </span>
+        <span>{output}</span>
+      </div>
+    </div>
+  );
+}
+
+const commandsContent = [
+  {
+    title: "/tweak:evaluate",
+    description:
+      "Start here. Pass an idea, get a full 14-dimension report back.",
+    content: (
+      <CommandExample
+        invocation='/tweak:evaluate "an app that helps restaurants reduce food waste"'
+        output="Your HTML report is ready. Want me to open it?"
+      />
+    ),
+  },
+  {
+    title: "/tweak:list",
+    description: "Shows every idea that was evaluated so far.",
+    content: (
+      <CommandExample
+        invocation="/tweak:list"
+        output="Found 12 past runs. Which one should I open?"
+      />
+    ),
+  },
+  {
+    title: "/tweak:show",
+    description:
+      "Opens a specific report in your browser. No re-running, just re-reading.",
+    content: (
+      <CommandExample
+        invocation="/tweak:show restaurant-food-waste"
+        output="Opening the report now."
+      />
+    ),
+  },
+  {
+    title: "/tweak:compare",
+    description:
+      "Diffs two runs side by side. It shows exactly what moved after you've iterated on an idea.",
+    content: (
+      <CommandExample
+        invocation="/tweak:compare restaurant-food-waste-jan restaurant-food-waste-mar"
+        output="Your comparison is ready. Want me to open it?"
+      />
+    ),
+  },
+  {
+    title: "/tweak:improve",
+    description:
+      "Reads your latest report and hands back concrete tweaks for the weakest dimensions.",
+    content: (
+      <CommandExample
+        invocation="/tweak:improve restaurant-food-waste"
+        output="Here are 5 ways to address your dealbreakers. Walk through them?"
+      />
+    ),
+  },
+  {
+    title: "/tweak:browse-hn",
+    description:
+      "Scans Hacker News and surfaces posts describing real technology shifts. Feed the good ones into /tweak:suggest-from-hn.",
+    content: (
+      <CommandExample
+        invocation="/tweak:browse-hn"
+        output="Found 5 posts worth a closer look. Open the first?"
+      />
+    ),
+  },
+  {
+    title: "/tweak:suggest-from-hn",
+    description:
+      "Reads an HN post and generates startup ideas built on the shift it describes.",
+    content: (
+      <CommandExample
+        invocation="/tweak:suggest-from-hn <hn-post-url>"
+        output="I turned it into 5 idea seeds. Ready to evaluate one?"
+      />
+    ),
+  },
+];
+
 // --- Article ---
 
 export default function TweakIdeaV2Article() {
@@ -163,7 +269,7 @@ export default function TweakIdeaV2Article() {
         </FadeInSection>
         <FadeInSection delay={0.1}>
           <p className="text-lg leading-relaxed text-muted-foreground">
-            Last week I shipped TweakIdea — a Claude Code skillset that
+            Last week I shipped Tweak Idea — a Claude Code skillset that
             evaluates startup ideas across 14 weighted dimensions and gives you
             a scored report with concrete next steps for developing the idea.{" "}
             <Link
@@ -173,13 +279,12 @@ export default function TweakIdeaV2Article() {
               The v1 article
             </Link>{" "}
             walks through the original pipeline in full: the research stage,
-            the 14 independent scoring agents, the hypothesis system. This post
-            is about what changed.
+            the 14 independent scoring agents, the hypothesis system.
           </p>
         </FadeInSection>
         <FadeInSection delay={0.2}>
           <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-            The original pipeline I shipped first:
+            The original pipeline — still the foundation in v2:
           </p>
         </FadeInSection>
         <FadeInSection delay={0.3}>
@@ -187,20 +292,24 @@ export default function TweakIdeaV2Article() {
             <PipelineDiagram />
           </div>
           <p className="mt-2 text-center text-sm text-muted-foreground">
-            The v1 pipeline — still the foundation in v2
+            Tweak Idea pipeline
           </p>
         </FadeInSection>
         <FadeInSection delay={0.4}>
           <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-            v2 keeps this foundation and adds: a JSON protocol between stages
-            that lets deterministic Python scripts do most of the work that
-            used to run inside the LLM (a standard run drops from ~30 minutes
-            to ~10), a set of new commands for browsing, comparing, and
-            improving past evaluations, report templates with a new card
-            layout, quality tiers, custom dimensions and weights, and
-            multi-founder profile merging. Here&apos;s what each of those
-            actually does.
+            Some of changes from <span className="font-semibold text-foreground">Tweak Idea 2.0.0</span>:
           </p>
+          <ul className="mt-4 list-disc space-y-2 pl-6 text-lg leading-relaxed text-muted-foreground">
+            <li>
+              deterministic Python scripts to do most of the work that used to run inside the LLM
+            </li>
+            <li>
+              new commands for browsing, comparing, and improving ideas
+            </li>
+            <li>new amazing report layout</li>
+            <li>quality tiers</li>
+            <li>multi-founder profiles</li>
+          </ul>
         </FadeInSection>
       </section>
 
@@ -211,111 +320,15 @@ export default function TweakIdeaV2Article() {
             The commands
           </h2>
         </FadeInSection>
-        <FadeInSection delay={0.1}>
-          <p className="text-lg leading-relaxed text-muted-foreground">
-            New to TweakIdea? Here is what it is: a Claude Code skill that
-            evaluates a startup idea and gives you a scored report. In v1 there
-            was one command,{" "}
-            <span className="font-mono text-sm">/tweak:evaluate</span>. You ran
-            it, you got the report, that was the whole thing. No way to look at
-            past runs, compare two ideas, or do anything else.
-          </p>
-        </FadeInSection>
         <FadeInSection delay={0.15}>
           <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-            In v2 the one command becomes a family. Each new one is a step in
+            In v2 the one <span className="font-mono text-sm">/tweak:evaluate</span> command becomes a family. Each new one is a step in
             the real loop of working on an idea: run it, look at it later,
             compare versions, get suggestions, find new things to try.
           </p>
         </FadeInSection>
-        <FadeInSection delay={0.2}>
-          <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-            <span className="font-mono text-sm">/tweak:evaluate</span> — still
-            the starting point. Give it an idea, it runs the pipeline, writes
-            the report to disk.
-          </p>
-          <pre className="mt-4 overflow-x-auto rounded-lg bg-muted px-4 py-3">
-            <code className="font-mono text-sm leading-relaxed text-foreground whitespace-pre-wrap break-words">
-              /tweak:evaluate &quot;an app that helps restaurants reduce food waste&quot;
-            </code>
-          </pre>
-        </FadeInSection>
-        <FadeInSection delay={0.25}>
-          <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-            <span className="font-mono text-sm">/tweak:list</span> — shows
-            every past run. I open this first when I want to remember what I
-            already looked at.
-          </p>
-          <pre className="mt-4 overflow-x-auto rounded-lg bg-muted px-4 py-3">
-            <code className="font-mono text-sm leading-relaxed text-foreground whitespace-pre-wrap break-words">
-              /tweak:list
-            </code>
-          </pre>
-        </FadeInSection>
-        <FadeInSection delay={0.3}>
-          <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-            <span className="font-mono text-sm">/tweak:show</span> — opens one
-            past run by name, so you can re-read the report without running it
-            again.
-          </p>
-          <pre className="mt-4 overflow-x-auto rounded-lg bg-muted px-4 py-3">
-            <code className="font-mono text-sm leading-relaxed text-foreground whitespace-pre-wrap break-words">
-              /tweak:show restaurant-food-waste
-            </code>
-          </pre>
-        </FadeInSection>
-        <FadeInSection delay={0.35}>
-          <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-            <span className="font-mono text-sm">/tweak:compare</span> — diffs
-            two runs. This is the one I use most. You run an idea, do a few
-            weeks of customer interviews, update your{" "}
-            <span className="font-mono text-sm">FOUNDER.md</span>, run it
-            again, and this command tells you exactly which parts of the score
-            moved.
-          </p>
-          <pre className="mt-4 overflow-x-auto rounded-lg bg-muted px-4 py-3">
-            <code className="font-mono text-sm leading-relaxed text-foreground whitespace-pre-wrap break-words">
-              /tweak:compare restaurant-food-waste-jan restaurant-food-waste-mar
-            </code>
-          </pre>
-        </FadeInSection>
-        <FadeInSection delay={0.4}>
-          <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-            <span className="font-mono text-sm">/tweak:improve</span> — reads
-            the latest run and prints a list of concrete suggestions for how
-            to raise the score. It does not change anything. You read the list
-            and decide what to act on.
-          </p>
-          <pre className="mt-4 overflow-x-auto rounded-lg bg-muted px-4 py-3">
-            <code className="font-mono text-sm leading-relaxed text-foreground whitespace-pre-wrap break-words">
-              /tweak:improve restaurant-food-waste
-            </code>
-          </pre>
-        </FadeInSection>
-        <FadeInSection delay={0.45}>
-          <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-            <span className="font-mono text-sm">/tweak:browse-hn</span> —
-            scans recent Hacker News posts and picks out candidates worth
-            looking at. It does not score anything itself. It just finds the
-            posts.
-          </p>
-          <pre className="mt-4 overflow-x-auto rounded-lg bg-muted px-4 py-3">
-            <code className="font-mono text-sm leading-relaxed text-foreground whitespace-pre-wrap break-words">
-              /tweak:browse-hn
-            </code>
-          </pre>
-        </FadeInSection>
-        <FadeInSection delay={0.5}>
-          <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-            <span className="font-mono text-sm">/tweak:suggest-from-hn</span>{" "}
-            — takes an HN post and turns it into an idea seed you can feed
-            into <span className="font-mono text-sm">/tweak:evaluate</span>.
-          </p>
-          <pre className="mt-4 overflow-x-auto rounded-lg bg-muted px-4 py-3">
-            <code className="font-mono text-sm leading-relaxed text-foreground whitespace-pre-wrap break-words">
-              /tweak:suggest-from-hn &lt;hn-post-url&gt;
-            </code>
-          </pre>
+        <FadeInSection delay={0.2} className="mt-8">
+          <StickyScroll content={commandsContent} />
         </FadeInSection>
       </section>
 
@@ -459,7 +472,7 @@ export default function TweakIdeaV2Article() {
               Multi-founder profile merging.
             </span>{" "}
             If you are working as a team, each founder writes their own{" "}
-            <span className="font-mono text-sm">FOUNDER.md</span>. TweakIdea
+            <span className="font-mono text-sm">FOUNDER.md</span>. Tweak Idea
             merges them into a single team-level profile and runs the
             founder-fit stage against the merged view. You get one evaluation,
             not N separate ones.
@@ -483,7 +496,7 @@ export default function TweakIdeaV2Article() {
               href="/tweakidea"
               className="text-accent underline underline-offset-4 transition-colors hover:text-foreground"
             >
-              TweakIdea marketing page
+              Tweak Idea marketing page
             </a>{" "}
             is about. It&apos;s not live yet, but that&apos;s the direction.
           </p>
@@ -497,7 +510,7 @@ export default function TweakIdeaV2Article() {
               rel="noopener noreferrer"
               className="text-accent underline underline-offset-4 transition-colors hover:text-foreground"
             >
-              TweakIdea is open source on GitHub
+              Tweak Idea is open source on GitHub
             </a>
             . The v1 pipeline is documented in{" "}
             <Link

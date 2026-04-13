@@ -12,12 +12,12 @@ export interface Article {
 // Used by generateStaticParams, generateMetadata, sitemap, and home page grid.
 export const articles: Article[] = [
   {
-    title: "Tweak Idea 2.0: what changed and why",
+    title: "Tweak Idea 2.0: better, faster, stronger (and new commands)",
     slug: "tweak-idea-v2",
     description:
-      "What's new in TweakIdea v2: new CLI commands, faster parallel pipeline, structured JSON scorecards, and quality tiers — told from the builder's perspective.",
+      "Fixing the rough edges in my Claude Code skill + new commands and features",
     date: "2026-04-14",
-    published: false,
+    published: true,
   },
   {
     title: "Tweak Idea: evaluate your startup ideas in Claude Code",
