@@ -4,7 +4,11 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 const fetchMock = vi.fn(async () => new Response("ok", { status: 200 }));
 vi.stubGlobal("fetch", fetchMock);
 
-import { GET, POST } from "@/app/_relay/[...path]/route";
+// IMPORTANT: source folder is `%5Frelay` (URL-encoded `_`) so Next.js
+// surfaces the literal `/_relay` URL path instead of treating an
+// underscore-prefixed folder as a private (non-routable) folder.
+// See SUMMARY.md "Deviations" for the full deviation note.
+import { GET, POST } from "@/app/%5Frelay/[...path]/route";
 
 function makeReq(url: string, init?: RequestInit) {
   return new Request(url, init) as unknown as import("next/server").NextRequest;
@@ -14,7 +18,7 @@ function makeCtx(path: string[]) {
   return { params: Promise.resolve({ path }) };
 }
 
-describe("app/_relay/[...path]/route.ts — PostHog reverse proxy", () => {
+describe("app/%5Frelay/[...path]/route.ts — PostHog reverse proxy", () => {
   beforeEach(() => {
     fetchMock.mockClear();
   });
@@ -80,7 +84,7 @@ describe("app/_relay/[...path]/route.ts — PostHog reverse proxy", () => {
   });
 
   it("handles OPTIONS preflight requests", async () => {
-    const { OPTIONS } = await import("@/app/_relay/[...path]/route");
+    const { OPTIONS } = await import("@/app/%5Frelay/[...path]/route");
     const res = await OPTIONS(
       makeReq("https://ephx.dev/_relay/capture", { method: "OPTIONS" }),
       makeCtx(["capture"]),
