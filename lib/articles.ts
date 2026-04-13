@@ -17,7 +17,7 @@ export const articles: Article[] = [
     description:
       "What's new in TweakIdea v2: new CLI commands, faster parallel pipeline, structured JSON scorecards, and quality tiers — told from the builder's perspective.",
     date: "2026-04-14",
-    published: true,
+    published: false,
   },
   {
     title: "Tweak Idea: evaluate your startup ideas in Claude Code",
