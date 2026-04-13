@@ -12,6 +12,14 @@ export interface Article {
 // Used by generateStaticParams, generateMetadata, sitemap, and home page grid.
 export const articles: Article[] = [
   {
+    title: "Tweak Idea 2.0: what changed and why",
+    slug: "tweak-idea-v2",
+    description:
+      "What's new in TweakIdea v2: new CLI commands, faster parallel pipeline, structured JSON scorecards, and quality tiers — told from the builder's perspective.",
+    date: "2026-04-14",
+    published: true,
+  },
+  {
     title: "Tweak Idea: evaluate your startup ideas in Claude Code",
     slug: "tweak-idea",
     description:
@@ -27,6 +35,8 @@ export const articleContent: Record<
   string,
   () => Promise<{ default: ComponentType }>
 > = {
+  "tweak-idea-v2": () =>
+    import("@/components/articles/content/tweak-idea-v2"),
   "tweak-idea": () =>
     import("@/components/articles/content/tweak-idea"),
 };
