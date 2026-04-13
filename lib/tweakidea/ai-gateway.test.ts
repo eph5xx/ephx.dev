@@ -3,7 +3,7 @@
 // The Anthropic SDK refuses to construct under jsdom because it detects the
 // "browser-like" environment and guards against API key exposure. Override
 // to node here — this matches the real Worker runtime, not jsdom.
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 
 vi.mock("@opennextjs/cloudflare", () => ({
   getCloudflareContext: vi.fn(() => ({
