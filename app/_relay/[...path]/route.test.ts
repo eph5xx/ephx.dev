@@ -65,4 +65,27 @@ describe("app/_relay/[...path]/route.ts — PostHog reverse proxy", () => {
     const res = await POST(makeReq("https://ephx.dev/_relay/capture", { method: "POST", body: "{}" }), makeCtx(["capture"]));
     expect(res.status).toBe(418);
   });
+
+  it("preserves query string when forwarding", async () => {
+    await POST(
+      makeReq("https://ephx.dev/_relay/capture?_=1712345678&v=123", {
+        method: "POST",
+        body: "{}",
+      }),
+      makeCtx(["capture"]),
+    );
+    const url = fetchMock.mock.calls[0][0] as string;
+    expect(url).toContain("_=1712345678");
+    expect(url).toContain("v=123");
+  });
+
+  it("handles OPTIONS preflight requests", async () => {
+    const { OPTIONS } = await import("@/app/_relay/[...path]/route");
+    const res = await OPTIONS(
+      makeReq("https://ephx.dev/_relay/capture", { method: "OPTIONS" }),
+      makeCtx(["capture"]),
+    );
+    expect(res).toBeInstanceOf(Response);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
 });
