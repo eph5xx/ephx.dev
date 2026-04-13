@@ -1,8 +1,10 @@
-import { articles } from "@/lib/articles";
+import { getPublishedArticles } from "@/lib/articles";
 import { ArticleCard } from "@/components/home/article-card";
 import { GradientMesh } from "@/components/home/gradient-mesh";
 
 export default function HomePage() {
+  const articles = getPublishedArticles();
+
   if (articles.length === 0) {
     return (
       <>
