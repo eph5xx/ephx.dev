@@ -70,12 +70,21 @@ this to never persist).
 1. Go to <https://app.posthog.com/signup> (or log in if you have an account)
 2. Create a new project named **ephx.dev** (any name works; this is cosmetic)
 3. From **Project Settings** → **Project API Key**, copy the `phc_...` key
-4. Paste it into `wrangler.jsonc` `vars.NEXT_PUBLIC_POSTHOG_KEY` (replace the
-   `REPLACE_WITH_POSTHOG_PROJECT_KEY` placeholder)
+4. Paste it into `.env.local` (local dev) or `.env.production` (prod build)
+   under `NEXT_PUBLIC_POSTHOG_KEY`. **Do NOT put it in `wrangler.jsonc` vars.**
+   Next.js inlines `NEXT_PUBLIC_*` at `next build` time from `.env*` files
+   or shell — wrangler runtime env never reaches the client bundle.
+   ```bash
+   cp .env.example .env.local
+   # Edit .env.local and paste your phc_... key into NEXT_PUBLIC_POSTHOG_KEY=
+   ```
+   Both `.env.local` and `.env.production` are gitignored (the `.env*` pattern
+   with a `!.env.example` negation); only `.env.example` ships with the repo.
 5. Under **Project Settings** → **Recordings**, confirm **Session Recording**
    is OFF (it should be by default). This is the D-19 / ANLY-03 privacy invariant.
-6. You'll also use this same key as `POSTHOG_API_KEY` in step 4 (server-side
-   secret — rotated independently from the client ingest key)
+6. You'll also use this same key as `POSTHOG_API_KEY` in step 5 (server-side
+   secret — rotated independently from the client ingest key). The server
+   secret goes through `wrangler secret put`; the client key goes through `.env.*`.
 
 ---
 
@@ -179,25 +188,49 @@ file if it differs (which it will after step 1 above pastes the real KV id).
 
 ---
 
-## 8. Values to fill in `wrangler.jsonc`
+## 8. Values to fill
 
-After completing all steps, your `wrangler.jsonc` should have NO
-`REPLACE_WITH_*` placeholders left. Checklist:
+Two files hold the operator-provisioned config. After completing all steps,
+both should have NO `REPLACE_WITH_*` placeholders left.
+
+### `wrangler.jsonc` — Worker runtime config
 
 | Placeholder | Where it comes from | Step |
 |---|---|---|
 | `REPLACE_WITH_KV_NAMESPACE_ID` | `wrangler kv namespace create` output | 1 |
 | `REPLACE_WITH_CLOUDFLARE_ACCOUNT_ID` | Cloudflare dashboard sidebar | 2 |
-| `REPLACE_WITH_POSTHOG_PROJECT_KEY` | PostHog Project Settings | 3 |
-| `REPLACE_WITH_TURNSTILE_SITE_KEY` | **Leave as-is** — Phase 4 will create Turnstile | (Phase 4) |
-
-Grep to confirm:
 
 ```bash
 grep REPLACE_WITH wrangler.jsonc
+# Should return 0 lines.
 ```
 
-Should return at most ONE line (the Turnstile placeholder — Phase 4 fills it).
+### `.env.local` / `.env.production` — Next.js build-time inlines
+
+`NEXT_PUBLIC_*` variables are consumed by `next build`, NOT by the Worker
+runtime. They must live in `.env*` files (or the shell environment) because
+Next.js inlines them into the client bundle at build time.
+
+| Variable | Where it comes from | Step |
+|---|---|---|
+| `NEXT_PUBLIC_POSTHOG_KEY` | PostHog Project Settings | 3 |
+| `NEXT_PUBLIC_POSTHOG_HOST` | Usually `https://us.i.posthog.com` (default) | 3 |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | **Leave blank** — Phase 4 fills it | (Phase 4) |
+
+```bash
+cp .env.example .env.local         # local dev
+cp .env.example .env.production    # production build
+# Edit both files with your real values.
+```
+
+Verify build-time inlining:
+
+```bash
+npm run build
+grep -r "phc_" .open-next/assets/_next/static/chunks/ 2>/dev/null | head -3
+# Should print at least one match — your NEXT_PUBLIC_POSTHOG_KEY is inlined.
+# Zero matches = key is empty; PostHogProvider will early-return and warn in dev.
+```
 
 ---
 
@@ -224,7 +257,9 @@ Should return at most ONE line (the Turnstile placeholder — Phase 4 fills it).
 | `wrangler deploy --dry-run` says `MISSING: ANTHROPIC_API_KEY` | Secret wasn't set, or set on a different Cloudflare account | Re-run `wrangler secret put ANTHROPIC_API_KEY` after `wrangler whoami` confirms correct account |
 | `lib/env.ts` throws `Required secret 'POSTHOG_API_KEY' is missing` at runtime | `.dev.vars` not populated, or running in prod without `wrangler secret put` | Populate `.dev.vars` (dev) or run `wrangler secret put POSTHOG_API_KEY` (prod) |
 | `wrangler types` fails with "invalid KV namespace id" | `wrangler.jsonc` still contains `REPLACE_WITH_KV_NAMESPACE_ID` | Run step 1 and paste the real id |
-| Browser network tab shows `/_relay/capture` returning 500 | PostHog ingest host unreachable, or AI Gateway token rotated | Check Cloudflare Workers logs via `wrangler tail`; verify `NEXT_PUBLIC_POSTHOG_KEY` is set in `wrangler.jsonc` vars |
+| Browser console warns `[PostHogProvider] NEXT_PUBLIC_POSTHOG_KEY is unset` | Key missing from `.env.local`/`.env.production`, or `next build` ran before the file existed | Populate `.env.local` (dev) or `.env.production` (prod) and rebuild. The key is inlined at build time, not at runtime — editing the file after `next build` does nothing until you rebuild. |
+| `npm run build` succeeds but grepping `.open-next/assets/_next/static/chunks/` for `phc_` returns zero matches | `NEXT_PUBLIC_POSTHOG_KEY` was not set in the shell OR `.env.production` when `next build` ran | Ensure the variable is set before `next build` — either export it in the shell or commit it to `.env.production` (gitignored) |
+| Browser network tab shows `/_relay/capture` returning 500 | PostHog ingest host unreachable, or relay route not deployed | Check Cloudflare Workers logs via `wrangler tail`; verify `POSTHOG_HOST` in `wrangler.jsonc vars` matches your PostHog region (us.i.posthog.com vs eu.i.posthog.com) |
 | PostHog live events feed is empty after completing a test flow | Adblocker or `/_relay` route handler not deployed | Disable adblocker to confirm the proxy is the issue; check `wrangler dev` output for any 404s on `/_relay/*` paths |
 
 ---
