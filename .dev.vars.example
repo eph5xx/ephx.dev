@@ -1,0 +1,15 @@
+# .dev.vars.example
+# Copy to .dev.vars and fill in real values for local development.
+# .dev.vars is gitignored — do NOT commit real secrets.
+
+# Anthropic API key (Phase 4 uses this for LLM calls)
+# Get from: https://console.anthropic.com/settings/keys
+ANTHROPIC_API_KEY="sk-ant-xxxxxxxxxxxxxxxxxxxxxxx"
+
+# Cloudflare AI Gateway authenticated-mode token
+# Create at: Cloudflare dashboard -> AI -> AI Gateway -> tweakidea -> Settings -> Create Token
+AI_GATEWAY_TOKEN="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+# PostHog server-side API key (same value as NEXT_PUBLIC_POSTHOG_KEY; kept as a
+# separate secret so it can be rotated independently server-side)
+POSTHOG_API_KEY="phc_xxxxxxxxxxxxxxxxxxxxxxxx"

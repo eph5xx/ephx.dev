@@ -1,0 +1,39 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "ephx-dev",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-04-01",
+  "compatibility_flags": ["nodejs_compat"],
+  // NOTE: no "build" block. Committing build.command here would cause
+  // `wrangler types` to recursively invoke `npm run build:worker` ->
+  // `next build` -> npm lifecycle -> `wrangler types` -> fork-bomb.
+  // See .planning/forensics/report-20260413-030405.md
+  "assets": {
+    "directory": ".open-next/assets",
+    "binding": "ASSETS"
+  },
+  "kv_namespaces": [
+    {
+      "binding": "TWEAKIDEA_KV",
+      "id": "0000000000000000000000000000000a"
+    }
+  ],
+  "ratelimits": [
+    {
+      "name": "TWEAKIDEA_LLM_RATE_LIMIT",
+      "namespace_id": "1001",
+      "simple": {
+        "limit": 10,
+        "period": 60
+      }
+    }
+  ],
+  "secrets": {
+    "required": ["ANTHROPIC_API_KEY", "AI_GATEWAY_TOKEN", "POSTHOG_API_KEY"]
+  },
+  "vars": {
+    "CF_ACCOUNT_ID": "74e58bfdbd3ff85defe09abc2295900a",
+    "AI_GATEWAY_NAME": "tweakidea",
+    "POSTHOG_HOST": "https://us.i.posthog.com"
+  }
+}

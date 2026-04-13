@@ -1,3 +1,6 @@
+# claude
+.claude/
+
 # dependencies
 /node_modules
 /.pnp
@@ -32,6 +35,11 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+
+# Wrangler local dev secrets -- never commit
+.dev.vars
+.dev.vars.local
 
 # vercel
 .vercel

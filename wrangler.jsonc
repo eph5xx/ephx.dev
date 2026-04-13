@@ -1,13 +1,55 @@
 {
-  "name": "ephx-dev",
-  "main": ".open-next/worker.js",
-  "compatibility_date": "2025-04-01",
-  "compatibility_flags": ["nodejs_compat"],
-  "build": {
-    "command": "npm run build:worker && opennextjs-cloudflare populateCache local"
-  },
-  "assets": {
-    "directory": ".open-next/assets",
-    "binding": "ASSETS"
-  }
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "ephx-dev",
+	"main": ".open-next/worker.js",
+	"compatibility_date": "2025-04-01",
+	"compatibility_flags": [
+		"nodejs_compat"
+	],
+	"build": {
+		"command": "npm run build:worker && opennextjs-cloudflare populateCache local"
+	},
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+	// --- NEW (D-01): ephemeral bundle storage. Operator replaces the id
+	//     placeholder with the value printed by
+	//     `wrangler kv namespace create TWEAKIDEA_KV` (see SETUP.md in Plan 01-09).
+	"kv_namespaces": [
+		{
+			"binding": "TWEAKIDEA_KV",
+			"id": "d4f6d9d14c4440038e7ca335212e8f55"
+		}
+	],
+	// --- NEW (D-02, pre-declared for Phase 4): rate limiting binding.
+	//     Declared now so Phase 4 never has to re-open this file.
+	"ratelimits": [
+		{
+			"name": "TWEAKIDEA_LLM_RATE_LIMIT",
+			"namespace_id": "1001",
+			"simple": {
+				"limit": 10,
+				"period": 60
+			}
+		}
+	],
+	// --- NEW (D-10 belt-and-suspenders + RESEARCH refinement 2):
+	//     Wrangler March 2026 feature. Validates at dev+deploy AND feeds
+	//     worker-configuration.d.ts typed fields.
+	"secrets": {
+		"required": [
+			"ANTHROPIC_API_KEY",
+			"AI_GATEWAY_TOKEN",
+			"POSTHOG_API_KEY"
+		]
+	},
+	// --- NEW (D-02, D-16): non-secret config vars consumed by Worker code.
+	//     NEXT_PUBLIC_* are NOT here — Next.js inlines those at build time from
+	//     .env*/shell, not from wrangler runtime env. See .env.example + SETUP.md §3.
+	"vars": {
+		"CF_ACCOUNT_ID": "74e58bfdbd3ff85defe09abc2295900a",
+		"AI_GATEWAY_NAME": "tweakidea",
+		"POSTHOG_HOST": "https://us.i.posthog.com"
+	}
 }
