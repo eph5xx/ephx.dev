@@ -149,131 +149,6 @@ function PipelineDiagram() {
   );
 }
 
-// --- Parallel Speed Diagram ---
-//
-// Visualizes the v2 parallel evaluation model: multiple dimension agents
-// running simultaneously rather than serially.
-
-function ParallelSpeedDiagram() {
-  return (
-    <div className="w-full overflow-hidden rounded-xl border border-border bg-card/50">
-      <svg
-        viewBox="0 0 800 200"
-        className="h-auto w-full"
-        role="img"
-        aria-label="v2 parallel pipeline: a single scoring input fans out to 14 dimension agents running simultaneously, all feeding into a single merge step, dramatically reducing total wall-clock time compared to sequential execution."
-      >
-        <defs>
-          <marker
-            id="arrow-v2"
-            viewBox="0 0 10 6"
-            refX="9"
-            refY="3"
-            markerWidth="7"
-            markerHeight="5"
-            orient="auto-start-reverse"
-          >
-            <path d="M 0 0 L 10 3 L 0 6 Z" fill="var(--color-muted-foreground)" />
-          </marker>
-        </defs>
-        <style>{`
-          @keyframes flow-v2 {
-            0% { stroke-dashoffset: 16; }
-            100% { stroke-dashoffset: 0; }
-          }
-          .flow-v2 {
-            fill: none;
-            stroke: var(--color-border);
-            stroke-width: 1.2;
-            stroke-dasharray: 4 4;
-            animation: flow-v2 1s linear infinite;
-            marker-end: url(#arrow-v2);
-          }
-          .flow-accent {
-            fill: none;
-            stroke: oklch(0.65 0.15 250 / 0.5);
-            stroke-width: 1.5;
-            stroke-dasharray: 4 4;
-            animation: flow-v2 1s linear infinite;
-            marker-end: url(#arrow-v2);
-          }
-          .node-v2 { fill: var(--color-card); stroke: var(--color-border); stroke-width: 1; }
-          .node-v2-accent { fill: oklch(0.65 0.15 250 / 0.1); stroke: oklch(0.65 0.15 250 / 0.4); stroke-width: 1.5; }
-          .node-v2-merge { fill: var(--color-card); stroke: oklch(0.65 0.15 250 / 0.4); stroke-width: 1.5; }
-          .lbl { fill: var(--color-foreground); font-size: 12px; font-family: var(--font-sans); text-anchor: middle; dominant-baseline: central; }
-          .lbl-sm { fill: var(--color-muted-foreground); font-size: 11px; font-family: var(--font-sans); text-anchor: middle; dominant-baseline: central; }
-          .lbl-bold { fill: var(--color-foreground); font-size: 12px; font-weight: 600; font-family: var(--font-sans); text-anchor: middle; dominant-baseline: central; }
-        `}</style>
-
-        {/* Input node */}
-        <g>
-          <rect x={20} y={84} width={110} height={32} rx={8} className="node-v2-accent" />
-          <text x={75} y={100} className="lbl-bold">Score input</text>
-        </g>
-
-        {/* Fan-out lines to 5 agent rows (representing all 14 in groups) */}
-        {/* Row 1 (top) */}
-        <path className="flow-accent" d="M 130,100 C 180,100 200,40 240,40" style={{ animationDelay: "0s" }} />
-        {/* Row 2 */}
-        <path className="flow-v2" d="M 130,100 C 180,100 200,70 240,70" style={{ animationDelay: "0.1s" }} />
-        {/* Row 3 (center) */}
-        <path className="flow-v2" d="M 130,100 L 240,100" style={{ animationDelay: "0.2s" }} />
-        {/* Row 4 */}
-        <path className="flow-v2" d="M 130,100 C 180,100 200,130 240,130" style={{ animationDelay: "0.3s" }} />
-        {/* Row 5 (bottom) */}
-        <path className="flow-v2" d="M 130,100 C 180,100 200,160 240,160" style={{ animationDelay: "0.4s" }} />
-
-        {/* Agent nodes (5 rows, representing 14 parallel agents) */}
-        {[
-          { y: 24, label: "Pain · WTP", sub: "2 agents" },
-          { y: 54, label: "Gap · Fit", sub: "2 agents" },
-          { y: 84, label: "Urgency · Freq", sub: "2 agents" },
-          { y: 114, label: "Market · Def", sub: "2 agents" },
-          { y: 144, label: "+ 6 more", sub: "6 agents" },
-        ].map(({ y, label, sub }) => (
-          <g key={label}>
-            <rect x={240} y={y} width={160} height={32} rx={6} className="node-v2" />
-            <text x={320} y={y + 11} className="lbl">
-              {label}
-            </text>
-            <text x={320} y={y + 23} className="lbl-sm">
-              {sub}
-            </text>
-          </g>
-        ))}
-
-        {/* Fan-in lines to merge */}
-        <path className="flow-v2" d="M 400,40 C 460,40 480,90 520,90" style={{ animationDelay: "0.5s" }} />
-        <path className="flow-v2" d="M 400,70 C 460,70 480,92 520,92" style={{ animationDelay: "0.6s" }} />
-        <path className="flow-v2" d="M 400,100 L 520,100" style={{ animationDelay: "0.7s" }} />
-        <path className="flow-v2" d="M 400,130 C 460,130 480,108 520,108" style={{ animationDelay: "0.8s" }} />
-        <path className="flow-v2" d="M 400,160 C 460,160 480,110 520,110" style={{ animationDelay: "0.9s" }} />
-
-        {/* Merge / verdict node */}
-        <g>
-          <rect x={520} y={74} width={130} height={52} rx={8} className="node-v2-merge" />
-          <text x={585} y={96} className="lbl-bold">Merge &amp; score</text>
-          <text x={585} y={112} className="lbl-sm">weighted verdict</text>
-        </g>
-
-        {/* Output arrow */}
-        <path className="flow-accent" d="M 650,100 L 710,100" style={{ animationDelay: "1s" }} />
-
-        {/* Output node */}
-        <g>
-          <rect x={710} y={84} width={70} height={32} rx={8} className="node-v2-accent" />
-          <text x={745} y={100} className="lbl-bold">Report</text>
-        </g>
-
-        {/* "All parallel" label */}
-        <text x={320} y={188} className="lbl-sm" style={{ fontSize: "10px" }}>
-          14 agents run simultaneously — no sequential bottlenecks
-        </text>
-      </svg>
-    </div>
-  );
-}
-
 // --- Article ---
 
 export default function TweakIdeaV2Article() {
@@ -333,24 +208,43 @@ export default function TweakIdeaV2Article() {
       <section className="mx-auto max-w-3xl px-4 pb-12 md:px-6">
         <FadeInSection>
           <h2 className="mb-6 text-2xl font-semibold tracking-tight">
-            The new commands
+            The commands
           </h2>
         </FadeInSection>
         <FadeInSection delay={0.1}>
           <p className="text-lg leading-relaxed text-muted-foreground">
-            v1 had one command:{" "}
+            New to TweakIdea? Here is what it is: a Claude Code skill that
+            evaluates a startup idea and gives you a scored report. In v1 there
+            was one command,{" "}
             <span className="font-mono text-sm">/tweak:evaluate</span>. You ran
-            it, got a report, and that was it. There was no way to look back at
-            past runs, compare two ideas side by side, or iterate on a run after
-            you&apos;d done some validation work. v2 fixes all of that.
+            it, you got the report, that was the whole thing. No way to look at
+            past runs, compare two ideas, or do anything else.
+          </p>
+        </FadeInSection>
+        <FadeInSection delay={0.15}>
+          <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+            In v2 the one command becomes a family. Each new one is a step in
+            the real loop of working on an idea: run it, look at it later,
+            compare versions, get suggestions, find new things to try.
           </p>
         </FadeInSection>
         <FadeInSection delay={0.2}>
           <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-            <span className="font-mono text-sm">/tweak:list</span> shows every
-            past run — date, idea summary, final verdict, and score. It&apos;s the
-            first thing I open when I want to remember which ideas I&apos;ve already
-            evaluated and what happened to them.
+            <span className="font-mono text-sm">/tweak:evaluate</span> — still
+            the starting point. Give it an idea, it runs the pipeline, writes
+            the report to disk.
+          </p>
+          <pre className="mt-4 overflow-x-auto rounded-lg bg-muted px-4 py-3">
+            <code className="font-mono text-sm leading-relaxed text-foreground whitespace-pre-wrap break-words">
+              /tweak:evaluate &quot;an app that helps restaurants reduce food waste&quot;
+            </code>
+          </pre>
+        </FadeInSection>
+        <FadeInSection delay={0.25}>
+          <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
+            <span className="font-mono text-sm">/tweak:list</span> — shows
+            every past run. I open this first when I want to remember what I
+            already looked at.
           </p>
           <pre className="mt-4 overflow-x-auto rounded-lg bg-muted px-4 py-3">
             <code className="font-mono text-sm leading-relaxed text-foreground whitespace-pre-wrap break-words">
@@ -360,9 +254,9 @@ export default function TweakIdeaV2Article() {
         </FadeInSection>
         <FadeInSection delay={0.3}>
           <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-            <span className="font-mono text-sm">/tweak:show</span> opens a
-            single run by ID or fuzzy name match. Useful when you want to re-read
-            the full scorecard without re-running the evaluation.
+            <span className="font-mono text-sm">/tweak:show</span> — opens one
+            past run by name, so you can re-read the report without running it
+            again.
           </p>
           <pre className="mt-4 overflow-x-auto rounded-lg bg-muted px-4 py-3">
             <code className="font-mono text-sm leading-relaxed text-foreground whitespace-pre-wrap break-words">
@@ -370,22 +264,14 @@ export default function TweakIdeaV2Article() {
             </code>
           </pre>
         </FadeInSection>
-        <FadeInSection delay={0.4}>
+        <FadeInSection delay={0.35}>
           <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-            <span className="font-mono text-sm">/tweak:compare</span> diffs two
-            runs. This is the one I use most now — you evaluate an idea, do a few
+            <span className="font-mono text-sm">/tweak:compare</span> — diffs
+            two runs. This is the one I use most. You run an idea, do a few
             weeks of customer interviews, update your{" "}
-            <span className="font-mono text-sm">FOUNDER.md</span> with what you
-            learned, re-run, and then compare to see exactly which dimensions
-            moved and by how much. It also works well for{" "}
-            <span className="font-semibold text-foreground">
-              multi-founder teams
-            </span>
-            : each co-founder runs the same idea independently with their own{" "}
-            <span className="font-mono text-sm">FOUNDER.md</span>, and{" "}
-            <span className="font-mono text-sm">/tweak:compare</span> surfaces
-            where the two profiles score the same idea differently — useful for
-            surfacing blind spots before you commit.
+            <span className="font-mono text-sm">FOUNDER.md</span>, run it
+            again, and this command tells you exactly which parts of the score
+            moved.
           </p>
           <pre className="mt-4 overflow-x-auto rounded-lg bg-muted px-4 py-3">
             <code className="font-mono text-sm leading-relaxed text-foreground whitespace-pre-wrap break-words">
@@ -393,13 +279,12 @@ export default function TweakIdeaV2Article() {
             </code>
           </pre>
         </FadeInSection>
-        <FadeInSection delay={0.5}>
+        <FadeInSection delay={0.4}>
           <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-            <span className="font-mono text-sm">/tweak:improve</span> re-runs
-            an existing evaluation with updated hypotheses. Instead of starting
-            from scratch, it picks up the prior research artifacts, applies your
-            updated assumptions, and re-scores only the dimensions affected.
-            Faster and cheaper than a full re-run.
+            <span className="font-mono text-sm">/tweak:improve</span> — reads
+            the latest run and prints a list of concrete suggestions for how
+            to raise the score. It does not change anything. You read the list
+            and decide what to act on.
           </p>
           <pre className="mt-4 overflow-x-auto rounded-lg bg-muted px-4 py-3">
             <code className="font-mono text-sm leading-relaxed text-foreground whitespace-pre-wrap break-words">
@@ -407,17 +292,28 @@ export default function TweakIdeaV2Article() {
             </code>
           </pre>
         </FadeInSection>
-        <FadeInSection delay={0.6}>
+        <FadeInSection delay={0.45}>
           <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-            <span className="font-mono text-sm">/tweak:browse-hn</span> is
-            different — it pulls recent Show HN posts and scores them as if they
-            were your own ideas. Good for getting a feel for the scoring range,
-            and occasionally for spotting a pattern in the kinds of ideas that
-            score well.
+            <span className="font-mono text-sm">/tweak:browse-hn</span> —
+            scans recent Hacker News posts and picks out candidates worth
+            looking at. It does not score anything itself. It just finds the
+            posts.
           </p>
           <pre className="mt-4 overflow-x-auto rounded-lg bg-muted px-4 py-3">
             <code className="font-mono text-sm leading-relaxed text-foreground whitespace-pre-wrap break-words">
               /tweak:browse-hn
+            </code>
+          </pre>
+        </FadeInSection>
+        <FadeInSection delay={0.5}>
+          <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
+            <span className="font-mono text-sm">/tweak:suggest-from-hn</span>{" "}
+            — takes an HN post and turns it into an idea seed you can feed
+            into <span className="font-mono text-sm">/tweak:evaluate</span>.
+          </p>
+          <pre className="mt-4 overflow-x-auto rounded-lg bg-muted px-4 py-3">
+            <code className="font-mono text-sm leading-relaxed text-foreground whitespace-pre-wrap break-words">
+              /tweak:suggest-from-hn &lt;hn-post-url&gt;
             </code>
           </pre>
         </FadeInSection>
@@ -427,144 +323,146 @@ export default function TweakIdeaV2Article() {
       <section className="mx-auto max-w-3xl px-4 pb-12 md:px-6">
         <FadeInSection>
           <h2 className="mb-6 text-2xl font-semibold tracking-tight">
-            Faster runs
+            How it got 3× faster — and more reliable
           </h2>
         </FadeInSection>
         <FadeInSection delay={0.1}>
           <p className="text-lg leading-relaxed text-muted-foreground">
-            The v1 pipeline had a bottleneck: the 14 scoring agents ran in a
-            fixed sequence, each waiting for the previous one to finish before
-            starting. That made runs slow — several minutes per idea, which is
-            fine once but gets painful when you&apos;re iterating.
+            v1 asked the LLM to do too much. Not just the thinking, but also
+            the typing. The merger stage wrote the whole report by itself —
+            hundreds of lines of text, through Opus, on every run. The HTML
+            version was written by the model word by word, not built by a
+            program. On a 700-line report, that is a lot of model time spent
+            just writing.
           </p>
         </FadeInSection>
         <FadeInSection delay={0.2}>
           <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-            v2 runs all 14 agents simultaneously. They share the research context
-            from the earlier pipeline stage but score independently. There are no
-            serial bottlenecks in the evaluation phase — the total wall-clock time
-            is now bounded by the slowest single agent, not the sum of all of
-            them. In practice that cuts evaluation time by 60–70% on a standard
-            run.
+            In v2 I split the work. The LLM still does the thinking — the hard
+            decisions — but now it has to answer in JSON, in a fixed format. A
+            Python script takes that JSON and does the rest: writes the
+            report, formats the sources, puts the sections together, passes
+            clean data to the next stage.
           </p>
         </FadeInSection>
         <FadeInSection delay={0.3}>
-          <div className="mt-8">
-            <ParallelSpeedDiagram />
+          <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+            A standard run now takes about 10 minutes instead of 30. And
+            because the LLM no longer decides how the report looks, the same
+            result always looks the same way. That matters. In v1 it was hard
+            to tell if two runs were really different, or if the model just
+            wrote them in different words.
+          </p>
+        </FadeInSection>
+      </section>
+
+      {/* Section 4: Hero — Cleaner Reports */}
+      <section className="mx-auto max-w-3xl px-4 pb-12 md:px-6">
+        <FadeInSection>
+          <h2 className="mb-6 text-2xl font-semibold tracking-tight">
+            Cleaner reports
+          </h2>
+        </FadeInSection>
+        <FadeInSection delay={0.1}>
+          <p className="text-lg leading-relaxed text-muted-foreground">
+            v1 produced a long markdown report. It worked, but it was hard to
+            scan, hard to diff across runs, and hard to share. v2 produces a
+            structured JSON scorecard that a Python renderer turns into a{" "}
+            <span className="font-semibold text-foreground">card layout</span>{" "}
+            — each section of the report is its own self-contained block with
+            a headline, a short body, and (where it helps) a small visual.
+          </p>
+        </FadeInSection>
+        <FadeInSection delay={0.2}>
+          <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+            The content is also better. The evidence is now written in plain
+            words — no more{" "}
+            <span className="font-mono text-sm">2V 3R 1F 5A</span> shorthand.
+            The report includes an executive summary, a market map, an
+            assumption tracker, and a small chart showing where your idea sits
+            among competitors. And you can pass{" "}
+            <span className="font-mono text-sm">--format html,pdf,png</span>{" "}
+            to any run and get three shareable files alongside the JSON.
+          </p>
+        </FadeInSection>
+        <FadeInSection delay={0.3}>
+          {/* TODO: replace with Aceternity Bento Grid + real example report links in next session */}
+          <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3 md:grid-rows-2">
+            <div className="flex min-h-40 flex-col justify-between rounded-xl border border-border bg-card/50 p-6 transition-colors hover:bg-card md:col-span-2 md:row-span-2 md:min-h-80">
+              <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Example report 1
+              </div>
+              <div className="text-sm text-muted-foreground">
+                Placeholder — real link goes here
+              </div>
+            </div>
+            <div className="flex min-h-40 flex-col justify-between rounded-xl border border-border bg-card/50 p-6 transition-colors hover:bg-card">
+              <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Example report 2
+              </div>
+              <div className="text-sm text-muted-foreground">
+                Placeholder
+              </div>
+            </div>
+            <div className="flex min-h-40 flex-col justify-between rounded-xl border border-border bg-card/50 p-6 transition-colors hover:bg-card">
+              <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                Example report 3
+              </div>
+              <div className="text-sm text-muted-foreground">
+                Placeholder
+              </div>
+            </div>
           </div>
-          <p className="mt-2 text-center text-sm text-muted-foreground">
-            All 14 agents run in parallel — wall-clock time drops to the slowest
-            single agent
+        </FadeInSection>
+      </section>
+
+      {/* Section 5: Power-User Knobs */}
+      <section className="mx-auto max-w-3xl px-4 pb-12 md:px-6">
+        <FadeInSection>
+          <h2 className="mb-6 text-2xl font-semibold tracking-tight">
+            Power-user knobs
+          </h2>
+        </FadeInSection>
+        <FadeInSection delay={0.1}>
+          <p className="text-lg leading-relaxed text-muted-foreground">
+            Three more things v2 added for people who want to push the tool
+            further.
+          </p>
+        </FadeInSection>
+        <FadeInSection delay={0.2}>
+          <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
+            <span className="font-semibold text-foreground">
+              Quality tiers.
+            </span>{" "}
+            Pass <span className="font-mono text-sm">--quality quick</span>,{" "}
+            <span className="font-mono text-sm">standard</span>, or{" "}
+            <span className="font-mono text-sm">deep</span>. Quick does a fast
+            first pass with a smaller model and less research. Standard is the
+            default. Deep runs a heavier model and allows each stage to do
+            more research before handing off.
+          </p>
+        </FadeInSection>
+        <FadeInSection delay={0.3}>
+          <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
+            <span className="font-semibold text-foreground">
+              Custom dimensions.
+            </span>{" "}
+            You can add your own scoring axes on top of the 14 defaults,
+            change the weights, or replace the formula the final score uses.
+            If one dimension matters much more to you than the others, you can
+            push its weight up and down-weight the ones that don&apos;t.
           </p>
         </FadeInSection>
         <FadeInSection delay={0.4}>
-          <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-            v2 also introduces three{" "}
-            <span className="font-semibold text-foreground">quality tiers</span>{" "}
-            — <span className="font-mono text-sm">quick</span>,{" "}
-            <span className="font-mono text-sm">standard</span>, and{" "}
-            <span className="font-mono text-sm">deep</span> — that control how
-            much research each agent does before scoring. Quick runs skip
-            supplemental web searches and use only the shared research base;
-            deep runs allow each agent to do extensive targeted searches. The
-            standard tier (the default) is a reasonable middle ground for most
-            ideas. More detail on tiers in the section below.
-          </p>
-        </FadeInSection>
-      </section>
-
-      {/* Section 4: Hero — Structured Reports */}
-      <section className="mx-auto max-w-3xl px-4 pb-12 md:px-6">
-        <FadeInSection>
-          <h2 className="mb-6 text-2xl font-semibold tracking-tight">
-            Structured reports
-          </h2>
-        </FadeInSection>
-        <FadeInSection delay={0.1}>
-          <p className="text-lg leading-relaxed text-muted-foreground">
-            v1 produced a long markdown report. Readable, but hard to diff
-            across runs and awkward to pipe into other tools. v2 agents output
-            structured JSON scorecards — every dimension score, confidence
-            interval, evidence citations, and the potential-vs-actual split, all
-            in a consistent schema.
-          </p>
-        </FadeInSection>
-        <FadeInSection delay={0.2}>
-          <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-            The structured output drives the new report renderer. Each run now
-            produces:
-          </p>
-          <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-3">
-            <div className="rounded-lg border border-border bg-card/50 p-5">
-              <p className="text-sm font-semibold uppercase tracking-wider text-accent">
-                Executive summary
-              </p>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                A one-page overview: overall score, verdict, top three strengths
-                and weaknesses, and the single highest-leverage next step.
-              </p>
-            </div>
-            <div className="rounded-lg border border-border bg-card/50 p-5">
-              <p className="text-sm font-semibold uppercase tracking-wider text-accent">
-                Market map
-              </p>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                A structured view of competitors and market positioning extracted
-                from the research phase — rendered as a sortable table with
-                source citations.
-              </p>
-            </div>
-            <div className="rounded-lg border border-border bg-card/50 p-5">
-              <p className="text-sm font-semibold uppercase tracking-wider text-accent">
-                PDF / PNG export
-              </p>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                The full scorecard and radar chart exported as a shareable file —
-                useful for sharing with co-founders or advisors without
-                sharing terminal access.
-              </p>
-            </div>
-          </div>
-        </FadeInSection>
-        <FadeInSection delay={0.3}>
-          <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-            The JSON schema also makes{" "}
-            <span className="font-mono text-sm">/tweak:compare</span> possible —
-            structured output is what lets the diff render cleanly rather than
-            doing a line-by-line text diff of two unstructured reports.
-          </p>
-        </FadeInSection>
-      </section>
-
-      {/* Section 5: Quality Tiers + Custom Dimensions */}
-      <section className="mx-auto max-w-3xl px-4 pb-12 md:px-6">
-        <FadeInSection>
-          <h2 className="mb-6 text-2xl font-semibold tracking-tight">
-            Quality tiers and custom dimensions
-          </h2>
-        </FadeInSection>
-        <FadeInSection delay={0.1}>
-          <p className="text-lg leading-relaxed text-muted-foreground">
-            The three quality tiers —{" "}
-            <span className="font-mono text-sm">quick</span>,{" "}
-            <span className="font-mono text-sm">standard</span>,{" "}
-            <span className="font-mono text-sm">deep</span> — let you trade off
-            speed against research depth. Quick is good for a first pass on a
-            raw idea; deep is worth the extra time when you&apos;re close to a
-            decision and want the most thorough evidence the agents can find.
-            Standard is the default and covers most everyday use cases well.
-          </p>
-        </FadeInSection>
-        <FadeInSection delay={0.2}>
-          <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-            Custom dimensions let you add your own scoring axes on top of the
-            14 defaults, or adjust the weights of existing ones. If your
-            opportunity is in a regulated industry, you might increase the weight
-            on regulatory risk. If you&apos;re already a subject-matter expert and
-            founder-market fit is a given, you can down-weight that dimension
-            and redistribute to the ones that matter more for your specific
-            context. The weighting math is the same — your custom weights just
-            replace or extend the defaults.
+          <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
+            <span className="font-semibold text-foreground">
+              Multi-founder profile merging.
+            </span>{" "}
+            If you are working as a team, each founder writes their own{" "}
+            <span className="font-mono text-sm">FOUNDER.md</span>. TweakIdea
+            merges them into a single team-level profile and runs the
+            founder-fit stage against the merged view. You get one evaluation,
+            not N separate ones.
           </p>
         </FadeInSection>
       </section>
