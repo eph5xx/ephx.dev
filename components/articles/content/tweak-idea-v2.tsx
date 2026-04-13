@@ -288,19 +288,18 @@ export default function TweakIdeaV2Article() {
         </FadeInSection>
         <FadeInSection delay={0.1}>
           <p className="text-lg leading-relaxed text-muted-foreground">
-            A few months ago I shipped TweakIdea — a Claude Code skillset that
-            evaluates startup ideas across 14 weighted dimensions and returns a{" "}
-            <span className="font-semibold text-foreground">GO / PIVOT / STOP</span>{" "}
-            verdict.{" "}
+            Last week I shipped TweakIdea — a Claude Code skillset that
+            evaluates startup ideas across 14 weighted dimensions and gives you
+            a scored report with concrete next steps for developing the idea.{" "}
             <Link
               href="/a/tweak-idea"
               className="text-accent underline underline-offset-4 transition-colors hover:text-foreground"
             >
               The v1 article
             </Link>{" "}
-            walks through the original pipeline in full — the research stage, the
-            14 independent scoring agents, the hypothesis system. I won&apos;t
-            repeat that here. This post is about what changed.
+            walks through the original pipeline in full: the research stage,
+            the 14 independent scoring agents, the hypothesis system. This post
+            is about what changed.
           </p>
         </FadeInSection>
         <FadeInSection delay={0.2}>
@@ -318,10 +317,14 @@ export default function TweakIdeaV2Article() {
         </FadeInSection>
         <FadeInSection delay={0.4}>
           <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-            v2 keeps this foundation and adds new commands, a faster parallel
-            evaluation engine, structured JSON scorecards with cleaner report
-            output, quality tiers, multi-founder support, and custom dimension
-            weights. Here&apos;s what each of those actually means.
+            v2 keeps this foundation and adds: a JSON protocol between stages
+            that lets deterministic Python scripts do most of the work that
+            used to run inside the LLM (a standard run drops from ~30 minutes
+            to ~10), a set of new commands for browsing, comparing, and
+            improving past evaluations, report templates with a new card
+            layout, quality tiers, custom dimensions and weights, and
+            multi-founder profile merging. Here&apos;s what each of those
+            actually does.
           </p>
         </FadeInSection>
       </section>
