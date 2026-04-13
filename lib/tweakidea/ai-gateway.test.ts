@@ -1,3 +1,8 @@
+// @vitest-environment node
+// ai-gateway.ts is server-only (imports @/lib/env → @opennextjs/cloudflare).
+// The Anthropic SDK refuses to construct under jsdom because it detects the
+// "browser-like" environment and guards against API key exposure. Override
+// to node here — this matches the real Worker runtime, not jsdom.
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 vi.mock("@opennextjs/cloudflare", () => ({
@@ -41,7 +46,7 @@ describe("lib/tweakidea/ai-gateway.ts", () => {
   it("sets cf-aig-skip-cache: true in default headers", () => {
     const client = createAnthropicClient();
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const headers = (client as any).defaultHeaders() ?? (client as any)._options?.defaultHeaders ?? {};
+    const headers = (client as any).defaultHeaders?.() ?? (client as any)._options?.defaultHeaders ?? {};
     // Accept either spelling — SDK internal layout varies
     const skip = headers["cf-aig-skip-cache"] ?? headers["Cf-Aig-Skip-Cache"];
     expect(skip).toBe("true");
