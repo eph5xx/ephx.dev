@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render } from "@testing-library/react";
 
 const { initMock, captureMock, identifyMock, posthogStub } = vi.hoisted(() => {
@@ -32,6 +32,11 @@ describe("components/providers/posthog-provider.tsx", () => {
     posthogStub.__loaded = false;
     posthogStub.config = {};
     sessionStorage.clear();
+    vi.stubEnv("NEXT_PUBLIC_POSTHOG_KEY", "phc_test_key");
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
   });
 
   it("initializes posthog-js on mount", () => {
@@ -80,5 +85,17 @@ describe("components/providers/posthog-provider.tsx", () => {
     render(<PostHogProvider>child</PostHogProvider>);
     const keys = Object.keys(sessionStorage);
     expect(keys.some((k) => k.includes("ph") || k.includes("did"))).toBe(true);
+  });
+
+  it("skips posthog.init when NEXT_PUBLIC_POSTHOG_KEY is unset (WR-01 guard)", () => {
+    vi.stubEnv("NEXT_PUBLIC_POSTHOG_KEY", "");
+    const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
+    render(<PostHogProvider>child</PostHogProvider>);
+    expect(initMock).not.toHaveBeenCalled();
+    // Dev-mode warning only fires when NODE_ENV !== production; vitest sets NODE_ENV=test.
+    expect(warnSpy).toHaveBeenCalledWith(
+      expect.stringContaining("NEXT_PUBLIC_POSTHOG_KEY is unset"),
+    );
+    warnSpy.mockRestore();
   });
 });

@@ -35,6 +35,19 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
     // Idempotency guard for React 19 strict-mode double-mounting (Pitfall 8).
     if (posthog.__loaded) return;
 
+    // Build-time inlined by Next.js from .env*/shell. If unset, skip init
+    // entirely — posthog.init("") silently no-ops and masks the misconfiguration.
+    const key = process.env.NEXT_PUBLIC_POSTHOG_KEY;
+    if (!key) {
+      if (process.env.NODE_ENV !== "production") {
+        console.warn(
+          "[PostHogProvider] NEXT_PUBLIC_POSTHOG_KEY is unset — skipping init. " +
+            "Set it in .env.local (dev) or .env.production (prod). See .env.example + SETUP.md §3.",
+        );
+      }
+      return;
+    }
+
     // Session-scoped distinct_id (D-21) — cleared on tab close.
     let distinctId = sessionStorage.getItem(SESSION_KEY);
     if (!distinctId) {
@@ -42,7 +55,7 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
       sessionStorage.setItem(SESSION_KEY, distinctId);
     }
 
-    posthog.init(process.env.NEXT_PUBLIC_POSTHOG_KEY ?? "", {
+    posthog.init(key, {
       api_host: "/_relay", // D-17 reverse proxy path (ANLY-08)
       ui_host: "https://us.posthog.com",
 
