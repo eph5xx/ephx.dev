@@ -10,8 +10,11 @@ provision the secrets. Run every step in this file once per environment
 
 **Prerequisites:**
 
-- Cloudflare account with Workers Paid plan (AI Gateway + Rate Limiting require paid)
-- Anthropic API account (`console.anthropic.com`)
+- **Cloudflare account — Workers Free plan is sufficient.** All three features we use run on Free:
+  - Workers KV binding: 100k reads/day, 1k writes/day, 1 GB storage
+  - Workers Rate Limiting binding (`ratelimits` in `wrangler.jsonc`, GA since 2025-09-19): free, in-process counter with no billing surface
+  - AI Gateway (independent product): free tier includes authenticated mode, 10 gateways/account, **100k cumulative logs** (not monthly — disable request-body logging on the gateway to stay under the cap indefinitely, see §2 below)
+- Anthropic API account (`console.anthropic.com`) — Anthropic charges per token, unrelated to Cloudflare
 - PostHog Cloud account (`app.posthog.com`, free tier works)
 - This repo cloned and `npm install` already run
 - `npx wrangler whoami` shows you logged in to the right Cloudflare account
@@ -59,9 +62,12 @@ authenticated mode for observability, rate limits, and caching control.
 entirely). The milestone also sets `cf-aig-skip-cache: true` as a default header
 in `lib/tweakidea/ai-gateway.ts`, but disabling at the gateway layer is belt-and-suspenders.
 
-Also set **Log retention** to the minimum offered — AI Gateway logs request
-bodies by default, and our request bodies contain user idea text (API-12 requires
-this to never persist).
+Also **disable request/response body logging** on this gateway — AI Gateway
+logs request bodies by default, and our request bodies contain user idea
+text (API-12 requires this to never persist). Go to **Settings** → **Logging**
+and toggle body logging OFF. This double-dip also keeps you under the Free
+tier's **100k cumulative log cap** (it's not a monthly reset — once full,
+you'd need to delete old logs or upgrade).
 
 ---
 
