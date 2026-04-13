@@ -1,16 +1,19 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render } from "@testing-library/react";
 
-const initMock = vi.fn();
-const captureMock = vi.fn();
-const identifyMock = vi.fn();
-const posthogStub = {
-  init: initMock,
-  capture: captureMock,
-  identify: identifyMock,
-  __loaded: false,
-  config: {} as Record<string, unknown>,
-};
+const { initMock, captureMock, identifyMock, posthogStub } = vi.hoisted(() => {
+  const initMock = vi.fn();
+  const captureMock = vi.fn();
+  const identifyMock = vi.fn();
+  const posthogStub = {
+    init: initMock,
+    capture: captureMock,
+    identify: identifyMock,
+    __loaded: false,
+    config: {} as Record<string, unknown>,
+  };
+  return { initMock, captureMock, identifyMock, posthogStub };
+});
 
 vi.mock("posthog-js", () => ({ default: posthogStub }));
 
