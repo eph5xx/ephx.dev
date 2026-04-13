@@ -52,5 +52,24 @@ describe("lib/tweakidea/ai-gateway.ts", () => {
     expect(skip).toBe("true");
   });
 
-  it.todo("sets cf-aig-authorization Bearer header from AI_GATEWAY_TOKEN");
+  it("sets cf-aig-authorization Bearer header from AI_GATEWAY_TOKEN", () => {
+    const client = createAnthropicClient();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const headers = (client as any).defaultHeaders?.() ?? (client as any)._options?.defaultHeaders ?? {};
+    const auth = headers["cf-aig-authorization"] ?? headers["Cf-Aig-Authorization"];
+    expect(auth).toBe("Bearer gw-token");
+  });
+
+  it("constructs baseURL from CF_ACCOUNT_ID and AI_GATEWAY_NAME env vars", () => {
+    const client = createAnthropicClient();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const baseURL = (client as any).baseURL as string;
+    expect(baseURL).toBe("https://gateway.ai.cloudflare.com/v1/acct-123/tweakidea/anthropic");
+  });
+
+  it("creates a fresh client per invocation (no module-level singleton)", () => {
+    const a = createAnthropicClient();
+    const b = createAnthropicClient();
+    expect(a).not.toBe(b);
+  });
 });
