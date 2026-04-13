@@ -32,7 +32,7 @@
     "required": ["ANTHROPIC_API_KEY", "AI_GATEWAY_TOKEN", "POSTHOG_API_KEY"]
   },
   "vars": {
-    "CF_ACCOUNT_ID": "REPLACE_WITH_CLOUDFLARE_ACCOUNT_ID",
+    "CF_ACCOUNT_ID": "74e58bfdbd3ff85defe09abc2295900a",
     "AI_GATEWAY_NAME": "tweakidea",
     "POSTHOG_HOST": "https://us.i.posthog.com"
   }
