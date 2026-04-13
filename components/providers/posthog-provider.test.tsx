@@ -76,9 +76,25 @@ describe("components/providers/posthog-provider.tsx", () => {
     expect(opts.mask_all_text).toBe(true);
   });
 
-  it("fires $pageview via capture() on mount (ANLY-04)", () => {
+  it("fires $pageview via capture() on mount (ANLY-04)", async () => {
     render(<PostHogProvider>child</PostHogProvider>);
-    expect(captureMock).toHaveBeenCalledWith("$pageview", expect.objectContaining({ $current_url: expect.any(String) }));
+    // Child is gated on ready state — wait for re-render after setReady(true).
+    await vi.waitFor(() => {
+      expect(captureMock).toHaveBeenCalledWith(
+        "$pageview",
+        expect.objectContaining({ $current_url: expect.any(String) }),
+      );
+    });
+  });
+
+  it("fires init BEFORE the first $pageview capture (WR-02 race guard)", async () => {
+    render(<PostHogProvider>child</PostHogProvider>);
+    await vi.waitFor(() => {
+      expect(captureMock).toHaveBeenCalled();
+    });
+    const initOrder = initMock.mock.invocationCallOrder[0];
+    const captureOrder = captureMock.mock.invocationCallOrder[0];
+    expect(initOrder).toBeLessThan(captureOrder);
   });
 
   it("stores distinct_id in sessionStorage not localStorage (D-21)", () => {

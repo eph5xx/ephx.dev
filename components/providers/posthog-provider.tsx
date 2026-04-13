@@ -6,7 +6,7 @@
 // Source: PITFALLS.md §Pitfall 4 (autocapture), §Pitfall 8 (strict-mode double init)
 // Source: https://posthog.com/docs/libraries/next-js
 
-import { useEffect, Suspense } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { usePathname, useSearchParams } from "next/navigation";
 import posthog from "posthog-js";
 
@@ -29,11 +29,22 @@ function PostHogPageview() {
 }
 
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
+  // WR-02 race guard: React fires child useEffects BEFORE parent effects, so
+  // PostHogPageview.capture() would run before posthog.init() unless we gate
+  // the child on a post-init state flip. We only mount the pageview child
+  // after init succeeds, so its first effect fires against an initialized
+  // client and the initial $pageview is captured reliably.
+  const [ready, setReady] = useState(false);
+
   useEffect(() => {
     if (typeof window === "undefined") return;
 
     // Idempotency guard for React 19 strict-mode double-mounting (Pitfall 8).
-    if (posthog.__loaded) return;
+    // If posthog is already initialized, just flip ready — don't re-init.
+    if (posthog.__loaded) {
+      setReady(true);
+      return;
+    }
 
     // Build-time inlined by Next.js from .env*/shell. If unset, skip init
     // entirely — posthog.init("") silently no-ops and masks the misconfiguration.
@@ -75,13 +86,17 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
         if (distinctId) ph.identify(distinctId);
       },
     });
+
+    setReady(true);
   }, []);
 
   return (
     <>
-      <Suspense fallback={null}>
-        <PostHogPageview />
-      </Suspense>
+      {ready && (
+        <Suspense fallback={null}>
+          <PostHogPageview />
+        </Suspense>
+      )}
       {children}
     </>
   );
