@@ -34,9 +34,6 @@
   "vars": {
     "CF_ACCOUNT_ID": "REPLACE_WITH_CLOUDFLARE_ACCOUNT_ID",
     "AI_GATEWAY_NAME": "tweakidea",
-    "POSTHOG_HOST": "https://us.i.posthog.com",
-    "NEXT_PUBLIC_POSTHOG_HOST": "https://us.i.posthog.com",
-    "NEXT_PUBLIC_POSTHOG_KEY": "REPLACE_WITH_POSTHOG_PROJECT_KEY",
-    "NEXT_PUBLIC_TURNSTILE_SITE_KEY": "REPLACE_WITH_TURNSTILE_SITE_KEY"
+    "POSTHOG_HOST": "https://us.i.posthog.com"
   }
 }

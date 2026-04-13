@@ -42,15 +42,12 @@
     "required": ["ANTHROPIC_API_KEY", "AI_GATEWAY_TOKEN", "POSTHOG_API_KEY"]
   },
 
-  // --- NEW (D-02, D-16): non-secret config vars.
-  //     NEXT_PUBLIC_* values are intentionally non-secret (write-only client
-  //     keys); they are inlined into the bundle at build time.
+  // --- NEW (D-02, D-16): non-secret config vars consumed by Worker code.
+  //     NEXT_PUBLIC_* are NOT here — Next.js inlines those at build time from
+  //     .env*/shell, not from wrangler runtime env. See .env.example + SETUP.md §3.
   "vars": {
     "CF_ACCOUNT_ID": "REPLACE_WITH_CLOUDFLARE_ACCOUNT_ID",
     "AI_GATEWAY_NAME": "tweakidea",
-    "POSTHOG_HOST": "https://us.i.posthog.com",
-    "NEXT_PUBLIC_POSTHOG_HOST": "https://us.i.posthog.com",
-    "NEXT_PUBLIC_POSTHOG_KEY": "REPLACE_WITH_POSTHOG_PROJECT_KEY",
-    "NEXT_PUBLIC_TURNSTILE_SITE_KEY": "REPLACE_WITH_TURNSTILE_SITE_KEY"
+    "POSTHOG_HOST": "https://us.i.posthog.com"
   }
 }

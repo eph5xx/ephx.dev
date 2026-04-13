@@ -18,8 +18,6 @@ const REQUIRED_VARS = [
   "CF_ACCOUNT_ID",
   "AI_GATEWAY_NAME",
   "POSTHOG_HOST",
-  "NEXT_PUBLIC_POSTHOG_KEY",
-  "NEXT_PUBLIC_POSTHOG_HOST",
 ] as const satisfies readonly (keyof CloudflareEnv)[];
 
 const REQUIRED_BINDINGS = [

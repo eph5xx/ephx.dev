@@ -14,8 +14,6 @@ vi.mock("@opennextjs/cloudflare", () => ({
       CF_ACCOUNT_ID: "acct-123",
       AI_GATEWAY_NAME: "tweakidea",
       POSTHOG_HOST: "https://us.i.posthog.com",
-      NEXT_PUBLIC_POSTHOG_KEY: "phc_x",
-      NEXT_PUBLIC_POSTHOG_HOST: "https://us.i.posthog.com",
       TWEAKIDEA_KV: {},
     } as unknown as CloudflareEnv,
     cf: {} as never,
