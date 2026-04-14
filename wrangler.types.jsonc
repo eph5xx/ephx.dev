@@ -7,7 +7,6 @@
   // NOTE: no "build" block. Committing build.command here would cause
   // `wrangler types` to recursively invoke `npm run build:worker` ->
   // `next build` -> npm lifecycle -> `wrangler types` -> fork-bomb.
-  // See .planning/forensics/report-20260413-030405.md
   "assets": {
     "directory": ".open-next/assets",
     "binding": "ASSETS"
