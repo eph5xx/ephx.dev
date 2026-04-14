@@ -5,6 +5,9 @@ import Link from "next/link";
 import { useInView } from "motion/react";
 import * as m from "motion/react-m";
 import { StickyScroll } from "@/components/ui/sticky-scroll-reveal";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { GitHubIcon } from "@/components/icons/github";
 
 function FadeInSection({
   children,
@@ -297,7 +300,7 @@ export default function TweakIdeaV2Article() {
         </FadeInSection>
         <FadeInSection delay={0.4}>
           <p className="mt-8 text-lg leading-relaxed text-muted-foreground">
-            Some of changes from <span className="font-semibold text-foreground">Tweak Idea 2.0.0</span>:
+            Some of the changes in <span className="font-semibold text-foreground">Tweak Idea 2.0.0</span>:
           </p>
           <ul className="mt-4 list-disc space-y-2 pl-6 text-lg leading-relaxed text-muted-foreground">
             <li>
@@ -307,8 +310,7 @@ export default function TweakIdeaV2Article() {
               new commands for browsing, comparing, and improving ideas
             </li>
             <li>new amazing report layout</li>
-            <li>quality tiers</li>
-            <li>multi-founder profiles</li>
+            <li>profiles for your potential co-founders</li>
           </ul>
         </FadeInSection>
       </section>
@@ -332,39 +334,66 @@ export default function TweakIdeaV2Article() {
         </FadeInSection>
       </section>
 
-      {/* Section 3: Hero — Speed / Pipeline Improvements */}
+      {/* Section 3: Hero — JSON in, JSON out */}
       <section className="mx-auto max-w-3xl px-4 pb-12 md:px-6">
         <FadeInSection>
           <h2 className="mb-6 text-2xl font-semibold tracking-tight">
-            How it got 3× faster — and more reliable
+            JSON in, JSON out
           </h2>
         </FadeInSection>
         <FadeInSection delay={0.1}>
           <p className="text-lg leading-relaxed text-muted-foreground">
-            v1 asked the LLM to do too much. Not just the thinking, but also
-            the typing. The merger stage wrote the whole report by itself —
-            hundreds of lines of text, through Opus, on every run. The HTML
-            version was written by the model word by word, not built by a
-            program. On a 700-line report, that is a lot of model time spent
-            just writing.
+            In v1, the LLM did everything. It wrote the whole report
+            in prose, hundreds of lines, on every run. It generated the HTML
+            output word by word. Every stage picked its own format.
           </p>
         </FadeInSection>
         <FadeInSection delay={0.2}>
           <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-            In v2 I split the work. The LLM still does the thinking — the hard
-            decisions — but now it has to answer in JSON, in a fixed format. A
-            Python script takes that JSON and does the rest: writes the
-            report, formats the sources, puts the sections together, passes
-            clean data to the next stage.
+            In v2, the LLM reads JSON files and writes JSON files.
+            The shape is fixed up front by a schema.
+            Once a JSON file is written, nothing can change it.
+            This workflow is great for Python: we can use scripts
+            wherever the LLM is not necessary, for example to build
+            different report formats.
           </p>
         </FadeInSection>
         <FadeInSection delay={0.3}>
           <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-            A standard run now takes about 10 minutes instead of 30. And
-            because the LLM no longer decides how the report looks, the same
-            result always looks the same way. That matters. In v1 it was hard
-            to tell if two runs were really different, or if the model just
-            wrote them in different words.
+            Three things change:
+          </p>
+        </FadeInSection>
+        <FadeInSection delay={0.4}>
+          <ul className="mt-4 list-disc space-y-2 pl-6 text-lg leading-relaxed text-muted-foreground">
+            <li>
+              <span className="font-semibold text-foreground">
+                Reliability.
+              </span>{" "}
+              Claude Code struggles with agent invocations that have to
+              write a 700-line file. A 30-minute run no longer crashes
+              halfway through a free-form report.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">Speed.</span>{" "}
+              A full run takes about 10 minutes now, down from 30. What
+              the LLM does in 20 seconds, Python does in 20 milliseconds.
+            </li>
+            <li>
+              <span className="font-semibold text-foreground">
+                Bounded failures.
+              </span>{" "}
+              When one JSON file comes back broken, you point the LLM at
+              that one file and ask it to fix it. Nothing else re-runs.
+            </li>
+          </ul>
+        </FadeInSection>
+        <FadeInSection delay={0.5}>
+          <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+            That last point is the one that matters most for serious Claude
+            Code skills. The model is fast and creative, but it is not a
+            replacement for code. Treat each LLM call in your skill as a function. Let code drive the pipeline. When the model fails, the
+            failure stays in one place, and so does the fix. That is the
+            pattern that made v2 work.
           </p>
         </FadeInSection>
       </section>
@@ -378,24 +407,8 @@ export default function TweakIdeaV2Article() {
         </FadeInSection>
         <FadeInSection delay={0.1}>
           <p className="text-lg leading-relaxed text-muted-foreground">
-            v1 produced a long markdown report. It worked, but it was hard to
-            scan, hard to diff across runs, and hard to share. v2 produces a
-            structured JSON scorecard that a Python renderer turns into a{" "}
-            <span className="font-semibold text-foreground">card layout</span>{" "}
-            — each section of the report is its own self-contained block with
-            a headline, a short body, and (where it helps) a small visual.
-          </p>
-        </FadeInSection>
-        <FadeInSection delay={0.2}>
-          <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-            The content is also better. The evidence is now written in plain
-            words — no more{" "}
-            <span className="font-mono text-sm">2V 3R 1F 5A</span> shorthand.
-            The report includes an executive summary, a market map, an
-            assumption tracker, and a small chart showing where your idea sits
-            among competitors. And you can pass{" "}
-            <span className="font-mono text-sm">--format html,pdf,png</span>{" "}
-            to any run and get three shareable files alongside the JSON.
+            v2 makes the HTML report beautiful. It is something you would
+            want to share. Take a look at the examples below.
           </p>
         </FadeInSection>
         <FadeInSection delay={0.3}>
@@ -429,99 +442,79 @@ export default function TweakIdeaV2Article() {
         </FadeInSection>
       </section>
 
-      {/* Section 5: Power-User Knobs */}
+      {/* Section 5: Profiling co-founders */}
       <section className="mx-auto max-w-3xl px-4 pb-12 md:px-6">
         <FadeInSection>
           <h2 className="mb-6 text-2xl font-semibold tracking-tight">
-            Power-user knobs
+            Profiling co-founders
           </h2>
         </FadeInSection>
         <FadeInSection delay={0.1}>
           <p className="text-lg leading-relaxed text-muted-foreground">
-            Three more things v2 added for people who want to push the tool
-            further.
-          </p>
-        </FadeInSection>
-        <FadeInSection delay={0.2}>
-          <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-            <span className="font-semibold text-foreground">
-              Quality tiers.
-            </span>{" "}
-            Pass <span className="font-mono text-sm">--quality quick</span>,{" "}
-            <span className="font-mono text-sm">standard</span>, or{" "}
-            <span className="font-mono text-sm">deep</span>. Quick does a fast
-            first pass with a smaller model and less research. Standard is the
-            default. Deep runs a heavier model and allows each stage to do
-            more research before handing off.
-          </p>
-        </FadeInSection>
-        <FadeInSection delay={0.3}>
-          <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-            <span className="font-semibold text-foreground">
-              Custom dimensions.
-            </span>{" "}
-            You can add your own scoring axes on top of the 14 defaults,
-            change the weights, or replace the formula the final score uses.
-            If one dimension matters much more to you than the others, you can
-            push its weight up and down-weight the ones that don&apos;t.
-          </p>
-        </FadeInSection>
-        <FadeInSection delay={0.4}>
-          <p className="mt-6 text-lg leading-relaxed text-muted-foreground">
-            <span className="font-semibold text-foreground">
-              Multi-founder profile merging.
-            </span>{" "}
-            If you are working as a team, each founder writes their own{" "}
-            <span className="font-mono text-sm">FOUNDER.md</span>. Tweak Idea
-            merges them into a single team-level profile and runs the
-            founder-fit stage against the merged view. You get one evaluation,
-            not N separate ones.
-          </p>
-        </FadeInSection>
-      </section>
-
-      {/* Section 6: Closing — What's Next */}
-      <section className="mx-auto max-w-3xl px-4 pb-12 md:px-6">
-        <FadeInSection>
-          <h2 className="mb-6 text-2xl font-semibold tracking-tight">
-            What&apos;s next
-          </h2>
-        </FadeInSection>
-        <FadeInSection delay={0.1}>
-          <p className="text-lg leading-relaxed text-muted-foreground">
-            The features above are what shipped in v2. The next focus is on the
-            web-native flow — a way to run the evaluation without Claude Code,
-            directly from a browser. That&apos;s what the{" "}
-            <a
-              href="/tweakidea"
-              className="text-accent underline underline-offset-4 transition-colors hover:text-foreground"
-            >
-              Tweak Idea marketing page
-            </a>{" "}
-            is about. It&apos;s not live yet, but that&apos;s the direction.
+            You can keep a profile for anyone you
+            might team up with: a current co-founder, a candidate you are
+            talking to, a friend you are considering. Then you can pull any
+            of them into an evaluation.
           </p>
         </FadeInSection>
         <FadeInSection delay={0.2}>
           <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-            If you want to follow along or contribute,{" "}
-            <a
+            Each profile is its own{" "}
+            <span className="font-mono text-sm">FOUNDER.md</span>, written in
+            your words: what they have done, what they are good at, what
+            they would bring. When you run{" "}
+            <span className="font-mono text-sm">/tweak:evaluate</span>, you can
+            pick which profiles to include, and the idea gets scored against
+            all of them together instead of against you alone.
+          </p>
+        </FadeInSection>
+        <FadeInSection delay={0.3}>
+          <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
+            It is a small change, but it shifts the question from &quot;is
+            this idea right for me?&quot; to &quot;is this idea right for
+            the team I could build to ship it?&quot;
+          </p>
+        </FadeInSection>
+      </section>
+
+      {/* Section 6: Try it */}
+      <section className="mx-auto max-w-3xl px-4 pb-12 md:px-6">
+        <FadeInSection>
+          <h2 className="mb-6 text-2xl font-semibold tracking-tight">
+            Try it
+          </h2>
+        </FadeInSection>
+        <FadeInSection delay={0.1}>
+          <p className="text-lg leading-relaxed text-muted-foreground">
+            Tweak Idea is open source. Clone the repo, drop the skill into
+            Claude Code, and run{" "}
+            <span className="font-mono text-sm">/tweak:evaluate</span> on an
+            idea you have been chewing on. Or start with the web version
+            below, no Claude Code needed.
+          </p>
+        </FadeInSection>
+        <FadeInSection delay={0.2}>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <Link
               href="https://github.com/eph5xx/tweakidea"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-accent underline underline-offset-4 transition-colors hover:text-foreground"
+              className={cn(
+                buttonVariants({ variant: "default", size: "lg" })
+              )}
             >
-              Tweak Idea is open source on GitHub
-            </a>
-            . The v1 pipeline is documented in{" "}
+              <GitHubIcon className="size-4" />
+              View on GitHub
+            </Link>
             <Link
-              href="/a/tweak-idea"
-              className="text-accent underline underline-offset-4 transition-colors hover:text-foreground"
+              href="/tweakidea"
+              className={cn(
+                buttonVariants({ variant: "outline", size: "lg" })
+              )}
             >
-              the original article
-            </Link>{" "}
-            if you want the full background on how the 14-dimension scoring
-            method works.
-          </p>
+              Try Tweak Idea
+            </Link>
+          </div>
         </FadeInSection>
       </section>
     </article>
