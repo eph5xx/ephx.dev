@@ -8,6 +8,7 @@ import { StickyScroll } from "@/components/ui/sticky-scroll-reveal";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { GitHubIcon } from "@/components/icons/github";
+import { ArrowUpRight } from "lucide-react";
 
 function FadeInSection({
   children,
@@ -258,6 +259,137 @@ const commandsContent = [
   },
 ];
 
+// --- Example report data (Notion-style cards) ---
+
+interface ReportDimension {
+  name: string;
+  score: number;
+  potential?: number;
+}
+
+interface Report {
+  name: string;
+  slug: string;
+  tagline: string;
+  problem?: string;
+  score: number;
+  potential: number;
+  evidence: string;
+  verdict: string;
+  dimensions?: ReportDimension[];
+}
+
+const reports: Report[] = [
+  {
+    name: "Airlock",
+    slug: "airlock",
+    tagline: "AI proxy for database queries",
+    score: 3.6,
+    potential: 4.0,
+    evidence: "C",
+    verdict: "PIVOT",
+    problem:
+      "Engineering teams using AI agents to write database queries face runaway costs and zero visibility until the bill arrives.",
+    dimensions: [
+      { name: "Pain Intensity", score: 4, potential: 5 },
+      { name: "Willingness to Pay", score: 4 },
+      { name: "Solution Gap", score: 5 },
+      { name: "Founder-Market Fit", score: 2, potential: 3 },
+      { name: "Urgency", score: 4 },
+      { name: "Frequency", score: 4 },
+      { name: "Market Size", score: 3, potential: 4 },
+      { name: "Defensibility", score: 3 },
+      { name: "Market Growth", score: 5 },
+      { name: "Scalability", score: 4, potential: 5 },
+      { name: "Target Customer", score: 2, potential: 3 },
+      { name: "Behavior Change", score: 4 },
+      { name: "Mandatory Nature", score: 2 },
+      { name: "Incumbent Indiff.", score: 3 },
+    ],
+  },
+  {
+    name: "Mirror",
+    slug: "mirror",
+    tagline: "Startup idea evaluator",
+    score: 3.2,
+    potential: 3.6,
+    evidence: "C",
+    verdict: "PIVOT",
+  },
+  {
+    name: "Giftwrap",
+    slug: "giftwrap",
+    tagline: "Employee gifting service",
+    score: 3.1,
+    potential: 3.3,
+    evidence: "B-",
+    verdict: "PIVOT",
+  },
+];
+
+const verdictStyle: Record<string, string> = {
+  PIVOT: "bg-amber-500/10 text-amber-400",
+  GO: "bg-emerald-500/10 text-emerald-400",
+  STOP: "bg-red-500/10 text-red-400",
+};
+
+const evidenceStyle: Record<string, string> = {
+  A: "bg-emerald-500/10 text-emerald-400",
+  "A-": "bg-emerald-500/10 text-emerald-400",
+  "B+": "bg-emerald-500/10 text-emerald-400",
+  B: "bg-teal-500/10 text-teal-400",
+  "B-": "bg-teal-500/10 text-teal-400",
+  C: "bg-amber-500/10 text-amber-400",
+  "C-": "bg-amber-500/10 text-amber-400",
+  D: "bg-orange-500/10 text-orange-400",
+  F: "bg-red-500/10 text-red-400",
+};
+
+function PropRow({
+  label,
+  children,
+}: {
+  label: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="flex items-center justify-between py-1.5">
+      <span className="text-xs text-muted-foreground/70">{label}</span>
+      <span className="text-xs">{children}</span>
+    </div>
+  );
+}
+
+function InlineBar({
+  value,
+  max = 5,
+  ghost,
+}: {
+  value: number;
+  max?: number;
+  ghost?: number;
+}) {
+  const pct = (value / max) * 100;
+  const ghostPct = ghost ? ((ghost - value) / max) * 100 : 0;
+  const fill =
+    value >= 4
+      ? "bg-emerald-400/60"
+      : value >= 3
+        ? "bg-amber-400/60"
+        : "bg-orange-400/60";
+  return (
+    <div className="relative h-1 w-16 overflow-hidden rounded-full bg-muted/50">
+      <div className={cn("h-full rounded-full", fill)} style={{ width: `${pct}%` }} />
+      {ghostPct > 0 && (
+        <div
+          className="absolute top-0 h-full rounded-full bg-emerald-400/20"
+          style={{ left: `${pct}%`, width: `${ghostPct}%` }}
+        />
+      )}
+    </div>
+  );
+}
+
 // --- Article ---
 
 export default function TweakIdeaV2Article() {
@@ -412,72 +544,208 @@ export default function TweakIdeaV2Article() {
           </p>
         </FadeInSection>
         <FadeInSection delay={0.3}>
-          {/* TODO: replace with Aceternity Bento Grid + real example report links in next session */}
-          <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3 md:grid-rows-2">
-            <div className="flex min-h-40 flex-col justify-between rounded-xl border border-border bg-card/50 p-6 transition-colors hover:bg-card md:col-span-2 md:row-span-2 md:min-h-80">
-              <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Example report 1
+          <div className="mt-8 grid grid-cols-1 gap-3 md:grid-cols-3 md:grid-rows-2">
+            {/* Featured: Airlock — 2×2 Notion card */}
+            <a
+              href={`/reports/${reports[0].slug}.html`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex cursor-pointer flex-col rounded-lg border border-border/60 bg-card/30 transition-colors hover:bg-card/60 md:col-span-2 md:row-span-2"
+            >
+              {/* Header */}
+              <div className="px-5 pt-5 pb-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-base">🛡️</span>
+                  <h3 className="text-sm font-medium text-foreground">
+                    {reports[0].name}
+                  </h3>
+                </div>
+                <p className="mt-1 text-xs text-muted-foreground/60">
+                  {reports[0].tagline}
+                </p>
               </div>
-              <div className="text-sm text-muted-foreground">
-                Placeholder — real link goes here
+
+              <div className="mx-5 border-t border-border/40" />
+
+              {reports[0].problem && (
+                <div className="px-5 py-3">
+                  <p className="text-xs leading-relaxed text-muted-foreground/70">
+                    {reports[0].problem}
+                  </p>
+                </div>
+              )}
+
+              {/* Properties */}
+              <div className="px-5 pb-2">
+                <PropRow label="Score">
+                  <span className="flex items-center gap-2">
+                    <InlineBar
+                      value={reports[0].score}
+                      ghost={reports[0].potential}
+                    />
+                    <span className="font-mono text-foreground">
+                      {reports[0].score.toFixed(1)}
+                    </span>
+                  </span>
+                </PropRow>
+                <PropRow label="Potential">
+                  <span className="flex items-center gap-2">
+                    <InlineBar value={reports[0].potential} />
+                    <span className="font-mono text-foreground">
+                      {reports[0].potential.toFixed(1)}
+                    </span>
+                  </span>
+                </PropRow>
+                <PropRow label="Evidence">
+                  <span
+                    className={cn(
+                      "rounded px-1.5 py-0.5 font-mono text-[11px] font-medium",
+                      evidenceStyle[reports[0].evidence] ??
+                        "bg-muted text-muted-foreground",
+                    )}
+                  >
+                    {reports[0].evidence}
+                  </span>
+                </PropRow>
+                <PropRow label="Verdict">
+                  <span
+                    className={cn(
+                      "rounded px-1.5 py-0.5 text-[11px] font-medium",
+                      verdictStyle[reports[0].verdict] ??
+                        "bg-muted text-muted-foreground",
+                    )}
+                  >
+                    {reports[0].verdict}
+                  </span>
+                </PropRow>
               </div>
-            </div>
-            <div className="flex min-h-40 flex-col justify-between rounded-xl border border-border bg-card/50 p-6 transition-colors hover:bg-card">
-              <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Example report 2
+
+              {/* Dimensions — two-column grid */}
+              {reports[0].dimensions && (
+                <div className="flex-1 px-5 pb-3">
+                  <div className="mb-2 border-t border-border/40 pt-3 text-[10px] font-medium uppercase tracking-widest text-muted-foreground/50">
+                    14 dimensions
+                  </div>
+                  <div className="grid grid-cols-2 gap-x-5 gap-y-0.5">
+                    {reports[0].dimensions.map((d) => (
+                      <div
+                        key={d.name}
+                        className="flex items-center gap-1.5 py-0.75"
+                      >
+                        <div
+                          className={cn(
+                            "h-1.5 w-1.5 shrink-0 rounded-full",
+                            d.score >= 4
+                              ? "bg-emerald-400"
+                              : d.score >= 3
+                                ? "bg-amber-400"
+                                : "bg-orange-400",
+                          )}
+                        />
+                        <span className="min-w-0 flex-1 truncate text-[11px] text-muted-foreground/70">
+                          {d.name}
+                        </span>
+                        <span className="shrink-0 font-mono text-[11px] text-foreground">
+                          {d.score}
+                          {d.potential && d.potential > d.score ? (
+                            <span className="text-muted-foreground/40">
+                              →{d.potential}
+                            </span>
+                          ) : null}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Footer */}
+              <div className="mt-auto flex items-center gap-1 border-t border-border/40 px-5 py-3 text-xs text-muted-foreground/50 transition-colors group-hover:text-muted-foreground">
+                Open report
+                <ArrowUpRight className="h-3 w-3" />
               </div>
-              <div className="text-sm text-muted-foreground">
-                Placeholder
-              </div>
-            </div>
-            <div className="flex min-h-40 flex-col justify-between rounded-xl border border-border bg-card/50 p-6 transition-colors hover:bg-card">
-              <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-                Example report 3
-              </div>
-              <div className="text-sm text-muted-foreground">
-                Placeholder
-              </div>
-            </div>
+            </a>
+
+            {/* Compact cards: Mirror & Giftwrap */}
+            {[
+              { report: reports[1], icon: "🪞" },
+              { report: reports[2], icon: "🎁" },
+            ].map(({ report, icon }) => (
+              <a
+                key={report.slug}
+                href={`/reports/${report.slug}.html`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex cursor-pointer flex-col rounded-lg border border-border/60 bg-card/30 transition-colors hover:bg-card/60"
+              >
+                {/* Header */}
+                <div className="px-4 pt-4 pb-2.5">
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm">{icon}</span>
+                    <h3 className="text-sm font-medium text-foreground">
+                      {report.name}
+                    </h3>
+                  </div>
+                  <p className="mt-0.5 text-[11px] text-muted-foreground/60">
+                    {report.tagline}
+                  </p>
+                </div>
+
+                <div className="mx-4 border-t border-border/40" />
+
+                {/* Properties */}
+                <div className="flex-1 px-4 py-2.5">
+                  <PropRow label="Score">
+                    <span className="flex items-center gap-2">
+                      <InlineBar
+                        value={report.score}
+                        ghost={report.potential}
+                      />
+                      <span className="font-mono text-foreground">
+                        {report.score.toFixed(1)}
+                      </span>
+                    </span>
+                  </PropRow>
+                  <PropRow label="Potential">
+                    <span className="font-mono text-foreground">
+                      {report.potential.toFixed(1)}
+                    </span>
+                  </PropRow>
+                  <PropRow label="Evidence">
+                    <span
+                      className={cn(
+                        "rounded px-1.5 py-0.5 font-mono text-[11px] font-medium",
+                        evidenceStyle[report.evidence] ??
+                          "bg-muted text-muted-foreground",
+                      )}
+                    >
+                      {report.evidence}
+                    </span>
+                  </PropRow>
+                  <PropRow label="Verdict">
+                    <span
+                      className={cn(
+                        "rounded px-1.5 py-0.5 text-[11px] font-medium",
+                        verdictStyle[report.verdict] ??
+                          "bg-muted text-muted-foreground",
+                      )}
+                    >
+                      {report.verdict}
+                    </span>
+                  </PropRow>
+                </div>
+
+                <div className="flex items-center gap-1 border-t border-border/40 px-4 py-2.5 text-xs text-muted-foreground/50 transition-colors group-hover:text-muted-foreground">
+                  Open report
+                  <ArrowUpRight className="h-3 w-3" />
+                </div>
+              </a>
+            ))}
           </div>
         </FadeInSection>
       </section>
 
-      {/* Section 5: Profiling co-founders */}
-      <section className="mx-auto max-w-3xl px-4 pb-12 md:px-6">
-        <FadeInSection>
-          <h2 className="mb-6 text-2xl font-semibold tracking-tight">
-            Profiling co-founders
-          </h2>
-        </FadeInSection>
-        <FadeInSection delay={0.1}>
-          <p className="text-lg leading-relaxed text-muted-foreground">
-            You can keep a profile for anyone you
-            might team up with: a current co-founder, a candidate you are
-            talking to, a friend you are considering. Then you can pull any
-            of them into an evaluation.
-          </p>
-        </FadeInSection>
-        <FadeInSection delay={0.2}>
-          <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-            Each profile is its own{" "}
-            <span className="font-mono text-sm">FOUNDER.md</span>, written in
-            your words: what they have done, what they are good at, what
-            they would bring. When you run{" "}
-            <span className="font-mono text-sm">/tweak:evaluate</span>, you can
-            pick which profiles to include, and the idea gets scored against
-            all of them together instead of against you alone.
-          </p>
-        </FadeInSection>
-        <FadeInSection delay={0.3}>
-          <p className="mt-4 text-lg leading-relaxed text-muted-foreground">
-            It is a small change, but it shifts the question from &quot;is
-            this idea right for me?&quot; to &quot;is this idea right for
-            the team I could build to ship it?&quot;
-          </p>
-        </FadeInSection>
-      </section>
-
-      {/* Section 6: Try it */}
+      {/* Section 5: Try it */}
       <section className="mx-auto max-w-3xl px-4 pb-12 md:px-6">
         <FadeInSection>
           <h2 className="mb-6 text-2xl font-semibold tracking-tight">
@@ -505,14 +773,6 @@ export default function TweakIdeaV2Article() {
             >
               <GitHubIcon className="size-4" />
               View on GitHub
-            </Link>
-            <Link
-              href="/tweakidea"
-              className={cn(
-                buttonVariants({ variant: "outline", size: "lg" })
-              )}
-            >
-              Try Tweak Idea
             </Link>
           </div>
         </FadeInSection>
