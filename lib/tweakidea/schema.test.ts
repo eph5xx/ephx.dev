@@ -5,8 +5,11 @@ import {
   AssumptionSchema,
   AssumptionListSchema,
   FounderProfileSchema,
-  BundleRequestSchema,
-  BundleResponseSchema,
+  SaveRequestSchema,
+  SaveResponseSchema,
+  FounderFitQuestionSchema,
+  FounderFitQuestionListSchema,
+  FounderFitAnswerSchema,
 } from "@/lib/tweakidea/schema";
 
 describe("lib/tweakidea/schema.ts", () => {
@@ -46,8 +49,8 @@ describe("lib/tweakidea/schema.ts", () => {
     expect(AssumptionListSchema.safeParse({ canary: CANARY, assumptions: [] }).success).toBe(false);
   });
 
-  it("BundleRequestSchema rejects idea_raw over 4000 chars", () => {
-    const result = BundleRequestSchema.safeParse({
+  it("SaveRequestSchema rejects idea_raw over 4000 chars", () => {
+    const result = SaveRequestSchema.safeParse({
       idea_raw: "x".repeat(4001),
       extraction: { problem: "a".repeat(20), solution: "b".repeat(20) },
       assumptions: [],
@@ -100,19 +103,19 @@ describe("lib/tweakidea/schema.ts", () => {
     }
   });
 
-  it("BundleResponseSchema validates id regex and ISO datetime", () => {
+  it("SaveResponseSchema validates id regex and ISO datetime", () => {
     const valid = {
       id: "abcDEF0123456789-_",
-      url: "https://ephx.dev/tweakidea/bundle/abcDEF0123456789-_",
+      url: "https://ephx.dev/tweakidea/s/abcDEF0123456789-_",
       expires_at: "2026-04-14T10:20:30.000Z",
     };
-    expect(BundleResponseSchema.safeParse(valid).success).toBe(true);
+    expect(SaveResponseSchema.safeParse(valid).success).toBe(true);
 
     const shortId = { ...valid, id: "short" };
-    expect(BundleResponseSchema.safeParse(shortId).success).toBe(false);
+    expect(SaveResponseSchema.safeParse(shortId).success).toBe(false);
 
     const badDate = { ...valid, expires_at: "yesterday" };
-    expect(BundleResponseSchema.safeParse(badDate).success).toBe(false);
+    expect(SaveResponseSchema.safeParse(badDate).success).toBe(false);
   });
 
   it("IdeaExtractionSchema.parse round-trips happy path", () => {
@@ -138,7 +141,55 @@ describe("lib/tweakidea/schema.ts", () => {
     expect(AssumptionListSchema.safeParse(tooFew).success).toBe(false);
   });
 
-  it("BundleRequestSchema accepts a complete valid payload", () => {
+  it("FounderFitQuestionSchema validates id regex", () => {
+    const valid = {
+      id: "fq_abc123",
+      question: "What domain expertise do you have here?",
+      rationale: "Checks whether the founder knows the space deeply",
+    };
+    expect(FounderFitQuestionSchema.safeParse(valid).success).toBe(true);
+    expect(
+      FounderFitQuestionSchema.safeParse({ ...valid, id: "nope" }).success,
+    ).toBe(false);
+  });
+
+  it("FounderFitQuestionListSchema enforces min 2 max 4 questions", () => {
+    const one = {
+      canary: CANARY,
+      questions: [
+        {
+          id: "fq_abc123",
+          question: "What edge do you have on this problem space?",
+          rationale: "Probes founder-market fit dimension",
+        },
+      ],
+    };
+    expect(FounderFitQuestionListSchema.safeParse(one).success).toBe(false);
+
+    const three = {
+      canary: CANARY,
+      questions: [1, 2, 3].map((n) => ({
+        id: `fq_abc12${n}`,
+        question: "What edge do you have on this problem space?",
+        rationale: "Probes founder-market fit dimension",
+      })),
+    };
+    expect(FounderFitQuestionListSchema.safeParse(three).success).toBe(true);
+  });
+
+  it("FounderFitAnswerSchema enforces answer min length", () => {
+    const tooShort = {
+      question_id: "fq_abc123",
+      question: "What edge do you have on this problem space?",
+      answer: "x",
+    };
+    expect(FounderFitAnswerSchema.safeParse(tooShort).success).toBe(false);
+
+    const ok = { ...tooShort, answer: "I spent 8 years as a product lead" };
+    expect(FounderFitAnswerSchema.safeParse(ok).success).toBe(true);
+  });
+
+  it("SaveRequestSchema accepts a complete valid payload", () => {
     const req = {
       idea_raw: "A tool that helps founders validate ideas faster",
       extraction: {
@@ -162,7 +213,7 @@ describe("lib/tweakidea/schema.ts", () => {
         why_this_idea: "Because I faced this exact pain myself",
       },
     };
-    const result = BundleRequestSchema.safeParse(req);
+    const result = SaveRequestSchema.safeParse(req);
     expect(result.success).toBe(true);
   });
 });

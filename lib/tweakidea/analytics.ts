@@ -36,12 +36,14 @@ export type EventPropsMap = {
     removed: number;
   };
   FOUNDER_SUBMITTED: { answered_count: number };
-  BUNDLE_GENERATED: {
-    bundle_id: string;
+  FOUNDER_FIT_QUESTIONS_LOADED: { count: number; latency_ms: number };
+  FOUNDER_FIT_QUESTIONS_SUBMITTED: { answered_count: number };
+  SAVE_GENERATED: {
+    save_id: string;
     total_bytes: number;
     latency_ms: number;
   };
-  ONELINER_COPIED: { bundle_id: string };
+  ONELINER_COPIED: { save_id: string };
 };
 
 export type EventName = keyof EventPropsMap;
