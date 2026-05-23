@@ -757,8 +757,7 @@ export default function TweakIdeaV2Article() {
             Tweak Idea is open source. Clone the repo, drop the skill into
             Claude Code, and run{" "}
             <span className="font-mono text-sm">/tweak:evaluate</span> on an
-            idea you have been chewing on. Or start with the web version
-            below, no Claude Code needed.
+            idea you have been chewing on.
           </p>
         </FadeInSection>
         <FadeInSection delay={0.2}>
