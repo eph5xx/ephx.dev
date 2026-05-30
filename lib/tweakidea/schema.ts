@@ -22,6 +22,9 @@ export const IdeaExtractionSchema = z.object({
 export type IdeaExtraction = z.infer<typeof IdeaExtractionSchema>;
 
 // --- Single assumption -----------------------------------------------------
+// Simplified: no user-editable confidence or category. The LLM still tags
+// each assumption with a category label (shown as read-only context), but
+// the user only decides keep-or-drop.
 
 export const AssumptionSchema = z.object({
   id: z.string().regex(/^a_[a-z0-9]{8}$/),
@@ -34,7 +37,6 @@ export const AssumptionSchema = z.object({
     "competition",
     "founder-fit",
   ]),
-  confidence: z.enum(["low", "medium", "high"]),
 });
 export type Assumption = z.infer<typeof AssumptionSchema>;
 
@@ -42,18 +44,17 @@ export type Assumption = z.infer<typeof AssumptionSchema>;
 
 export const AssumptionListSchema = z.object({
   canary: CanaryField,
-  assumptions: z.array(AssumptionSchema).min(3).max(12),
+  assumptions: z.array(AssumptionSchema).min(3).max(8),
 });
 export type AssumptionList = z.infer<typeof AssumptionListSchema>;
 
 // --- Founder profile (Phase 6 stage 3 output) ------------------------------
-// Web-native schema — NOT ported from the TweakIdea CLI repo, per
-// CONTEXT.md §specifics and REQUIREMENTS.md §SRVY-06.
+// Simplified to 3 fields. Background absorbs "why this idea" + years of
+// domain experience as free text. Primary skill + commitment remain as
+// quick pills so the LLM can tailor fit questions to the founder's edge.
 
 export const FounderProfileSchema = z.object({
-  name: z.string().trim().max(120).optional(),
-  background: z.string().trim().min(10).max(500),
-  domain_expertise_years: z.number().int().min(0).max(60),
+  background: z.string().trim().min(10).max(600),
   primary_skill: z.enum([
     "technical",
     "product",
@@ -64,33 +65,64 @@ export const FounderProfileSchema = z.object({
     "other",
   ]),
   commitment: z.enum(["full-time", "nights-weekends", "researching"]),
-  why_this_idea: z.string().trim().min(10).max(500),
 });
 export type FounderProfile = z.infer<typeof FounderProfileSchema>;
 
-// --- Bundle generation request (Phase 5 POST body) -------------------------
+// --- Founder-idea fit questions (new — LLM-generated, Stage 3) -------------
+// Exactly 3 questions tailored to the founder's profile + the extracted idea.
+// Stored in the save bundle as Q/A pairs so the CLI can consume them.
+
+export const FOUNDER_FIT_QUESTION_COUNT = 3;
+
+export const FounderFitQuestionSchema = z.object({
+  id: z.string().regex(/^fq_[a-z0-9]{6}$/),
+  question: z.string().trim().min(10).max(300),
+  rationale: z.string().trim().min(10).max(200),
+});
+export type FounderFitQuestion = z.infer<typeof FounderFitQuestionSchema>;
+
+export const FounderFitQuestionListSchema = z.object({
+  canary: CanaryField,
+  questions: z
+    .array(FounderFitQuestionSchema)
+    .length(FOUNDER_FIT_QUESTION_COUNT),
+});
+export type FounderFitQuestionList = z.infer<typeof FounderFitQuestionListSchema>;
+
+export const FounderFitAnswerSchema = z.object({
+  question_id: z.string().regex(/^fq_[a-z0-9]{6}$/),
+  question: z.string().trim().min(10).max(300),
+  answer: z.string().trim().min(5).max(800),
+});
+export type FounderFitAnswer = z.infer<typeof FounderFitAnswerSchema>;
+
+// --- Save request (Phase 5 POST body — renamed from BundleRequest) ---------
 // idea_raw uses the API-07 hard cap at 4000 chars.
 // extraction drops the canary because the user has already confirmed it.
 
-export const BundleRequestSchema = z.object({
+export const SaveRequestSchema = z.object({
   idea_raw: z.string().trim().min(20).max(4000),
   extraction: IdeaExtractionSchema.omit({ canary: true }),
   assumptions: z
     .array(AssumptionSchema.extend({ keep: z.boolean() }))
     .min(1)
-    .max(12),
+    .max(8),
   founder: FounderProfileSchema,
+  founder_fit_answers: z
+    .array(FounderFitAnswerSchema)
+    .length(FOUNDER_FIT_QUESTION_COUNT)
+    .optional(),
 });
-export type BundleRequest = z.infer<typeof BundleRequestSchema>;
+export type SaveRequest = z.infer<typeof SaveRequestSchema>;
 
-// --- Bundle generation response --------------------------------------------
+// --- Save response (renamed from BundleResponse) --------------------------
 // id regex enforces BNDL-02 (>= 95-bit random).
-// expires_at is ISO 8601 so clients + the /tweakidea/bundle/[id] route
+// expires_at is ISO 8601 so clients + the /tweakidea/s/[id] route
 // can compare against Date.now() for the application-layer 24h expiry.
 
-export const BundleResponseSchema = z.object({
+export const SaveResponseSchema = z.object({
   id: z.string().regex(/^[A-Za-z0-9_-]{16,32}$/),
   url: z.string().url(),
   expires_at: z.string().datetime(),
 });
-export type BundleResponse = z.infer<typeof BundleResponseSchema>;
+export type SaveResponse = z.infer<typeof SaveResponseSchema>;

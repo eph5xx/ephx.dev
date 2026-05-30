@@ -55,8 +55,8 @@ describe("lib/tweakidea/analytics.ts — captureEvent()", () => {
 
   it("wraps shutdown() in ctx.waitUntil (final drain)", () => {
     const { ctx } = makeCtx();
-    captureEvent(ctx, "did-1", "BUNDLE_GENERATED", {
-      bundle_id: "abc",
+    captureEvent(ctx, "did-1", "SAVE_GENERATED", {
+      save_id: "abc",
       total_bytes: 1234,
       latency_ms: 50,
     });
