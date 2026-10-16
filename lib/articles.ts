@@ -9,7 +9,8 @@ export interface Article {
 }
 
 // Article metadata registry -- single source of truth for all article data.
-// Used by generateStaticParams, generateMetadata, sitemap, and home page grid.
+// Used by generateStaticParams, generateMetadata, and sitemap. Articles are not
+// listed anywhere on the site; they are reachable by direct URL only.
 export const articles: Article[] = [
   {
     title: "Tweak Idea 2.0: better, faster, stronger (and new commands)",
@@ -46,7 +47,7 @@ export function getArticleBySlug(slug: string): Article | undefined {
   return articles.find((a) => a.slug === slug && a.published);
 }
 
-// Helper: get all published articles (for home page grid, sitemap, etc.)
+// Helper: get all published articles (for sitemap, etc.)
 export function getPublishedArticles(): Article[] {
   return articles.filter((a) => a.published);
 }
