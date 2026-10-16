@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { articles, articleContent, getArticleBySlug } from "@/lib/articles";
 import { ArticleHeader } from "@/components/articles/article-header";
@@ -9,9 +10,7 @@ export const dynamicParams = false;
 
 // Generates all article pages at build time
 export function generateStaticParams() {
-  return articles
-    .filter((a) => a.published)
-    .map((a) => ({ slug: a.slug }));
+  return articles.filter((a) => a.published).map((a) => ({ slug: a.slug }));
 }
 
 // Per-page metadata for SEO + LinkedIn OG tags
@@ -64,6 +63,14 @@ export default async function ArticlePage({
       <ReadingProgress />
       <ArticleHeader article={article} />
       <Content />
+      <div className="mx-auto w-full max-w-3xl px-4 md:px-6">
+        <Link
+          href="/"
+          className="text-muted-foreground hover:text-foreground font-mono text-sm transition-colors"
+        >
+          &larr; Home
+        </Link>
+      </div>
     </>
   );
 }
