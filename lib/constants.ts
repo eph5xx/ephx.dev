@@ -20,8 +20,8 @@ export interface Project {
 export interface Role {
   role: string;
   company: string;
-  /** Shown on a second line under the role */
-  summary?: string;
+  /** Third part of the one-line entry: team, program, or scope */
+  focus: string;
   url?: string;
   /** e.g. "2022–2024" */
   period?: string;
@@ -107,35 +107,36 @@ export const PROJECTS: Project[] = [
 
 export const BACKGROUND: Role[] = [
   {
-    role: "B.S., Software Engineering",
-    company: "Far Eastern Federal University",
+    role: "B.S.",
+    company: "FEFU",
+    focus: "Software Engineering",
     url: "https://www.dvfu.ru/",
     period: "2018–2022",
   },
   {
     role: "Founder",
     company: "CODE work",
-    summary: "Student volunteer org, 800+ participants",
+    focus: "800+ volunteers",
     period: "2021–2022",
   },
   {
-    role: "Software Engineer",
+    role: "SWE",
     company: "Yandex",
-    summary: "Search as a Service team",
+    focus: "Search as a Service",
     url: "https://yandex.com/",
     period: "2022–2025",
   },
   {
     role: "Student",
-    company: "Yandex School of Data Analysis",
-    summary: "Machine learning program",
+    company: "YSDA",
+    focus: "Machine Learning",
     url: "https://shad.yandex.ru/",
     period: "2023–2024",
   },
   {
-    role: "Software Engineer",
+    role: "SWE",
     company: "Databricks",
-    summary: "Neon Storage team",
+    focus: "Neon Storage",
     url: "https://www.databricks.com/",
     period: "2025–2026",
   },

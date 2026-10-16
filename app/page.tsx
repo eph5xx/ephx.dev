@@ -57,9 +57,12 @@ export default function HomePage() {
               index={i}
               href={item.url}
               title={item.role}
-              detail={<>&middot; {item.company}</>}
+              detail={
+                <>
+                  &middot; {item.company} &middot; {item.focus}
+                </>
+              }
               meta={item.period}
-              description={item.summary}
             />
           ))}
         </HoverList>
