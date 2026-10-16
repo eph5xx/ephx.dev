@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
-import { iosevka, iosevkaAile } from "@/app/fonts";
+import { iosevka, schibstedGrotesk } from "@/app/fonts";
 import { MotionProvider } from "@/components/providers/motion-provider";
 import { PostHogProvider } from "@/components/providers/posthog-provider";
-import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { PROFILE, SITE_NAME } from "@/lib/constants";
 import "./globals.css";
@@ -32,13 +31,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`dark ${iosevkaAile.variable} ${iosevka.variable}`}
+      className={`${schibstedGrotesk.variable} ${iosevka.variable}`}
     >
       <body className="bg-background text-foreground font-sans antialiased">
         <MotionProvider>
           <PostHogProvider>
             <div className="mx-auto flex min-h-screen w-full max-w-3xl flex-col gap-12 py-6 md:py-8 lg:py-10">
-              <SiteHeader />
               <main className="flex flex-1 flex-col">{children}</main>
               <SiteFooter />
             </div>

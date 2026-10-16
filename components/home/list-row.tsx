@@ -9,6 +9,8 @@ interface ListRowProps {
   /** Hide the detail text below the sm breakpoint. */
   hideDetailOnMobile?: boolean;
   meta?: ReactNode;
+  /** Muted second line under the title row. */
+  description?: ReactNode;
   href?: string;
 }
 
@@ -18,6 +20,7 @@ export function ListRow({
   detail,
   hideDetailOnMobile = false,
   meta,
+  description,
   href,
 }: ListRowProps) {
   const content = (
@@ -36,6 +39,11 @@ export function ListRow({
       {meta && (
         <span className="text-muted-foreground ml-auto shrink-0 font-mono text-sm whitespace-nowrap tabular-nums">
           {meta}
+        </span>
+      )}
+      {description && (
+        <span className="text-muted-foreground basis-full text-sm leading-relaxed text-pretty">
+          {description}
         </span>
       )}
     </>

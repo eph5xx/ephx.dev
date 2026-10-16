@@ -14,12 +14,14 @@ export interface Project {
   description: string;
   url: string;
   /** Launch month, formatted as MM.YYYY */
-  date: string;
+  date?: string;
 }
 
 export interface Role {
   role: string;
   company: string;
+  /** Shown on a second line under the role */
+  summary?: string;
   url?: string;
   /** e.g. "2022–2024" */
   period?: string;
@@ -32,36 +34,110 @@ export interface ProfileLink {
   href: string;
 }
 
+// Placeholder target until each project gets its own page.
+const PROJECT_URL = "https://ephx.dev";
+
 export const PROJECTS: Project[] = [
   {
-    name: "Tweak Idea",
+    name: "TweakIdea",
     description: "Claude Code skill that scores startup ideas.",
-    url: "https://github.com/eph5xx/tweakidea",
+    url: PROJECT_URL,
     date: "04.2026",
+  },
+  {
+    name: "Foglight Connectivity",
+    description:
+      "Connectivity, memory, and RAG for agents, plus corpus building.",
+    url: PROJECT_URL,
+    date: "04.2026",
+  },
+  {
+    name: "Biviu",
+    description:
+      "Paradigm-style AI tables for decisions, shown on a people database.",
+    url: PROJECT_URL,
+    date: "05.2026",
+  },
+  {
+    name: "Fjords",
+    description:
+      "AI cofounder: dashboard, social media, distribution, AI investor. Pluginizable.",
+    url: PROJECT_URL,
+    date: "05.2026",
+  },
+  {
+    name: "Surf Skills",
+    description: "Directory of AI agent skills, each shown actually working.",
+    url: PROJECT_URL,
+    date: "06.2026",
+  },
+  {
+    name: "Design Mascot",
+    description: "Paste a link, get a mascot sketched to match your site.",
+    url: PROJECT_URL,
+    date: "07.2026",
+  },
+  {
+    name: "Touchless",
+    description:
+      "World-class mic capture with plugins: tutor, idea capture, and more.",
+    url: PROJECT_URL,
+    date: "07.2026",
+  },
+  {
+    name: "Foglight Agent Builder",
+    description:
+      "AI setup app for building agents, with custom search relevance.",
+    url: PROJECT_URL,
+    date: "08.2026",
+  },
+  {
+    name: "Foglight Vibe Clustering",
+    description: "Cluster anything by vibe.",
+    url: PROJECT_URL,
+    date: "09.2026",
+  },
+  {
+    name: "Foglight Jobs",
+    description: "Foglight applied to hiring and job search.",
+    url: PROJECT_URL,
+    date: "10.2026",
   },
 ];
 
 export const BACKGROUND: Role[] = [
   {
-    role: "Software Engineer",
-    company: "Databricks",
-    url: "https://www.databricks.com/",
+    role: "B.S., Software Engineering",
+    company: "Far Eastern Federal University",
+    url: "https://www.dvfu.ru/",
+    period: "2018–2022",
+  },
+  {
+    role: "Founder",
+    company: "CODE work",
+    summary: "Student volunteer org, 800+ participants",
+    period: "2021–2022",
   },
   {
     role: "Software Engineer",
     company: "Yandex",
+    summary: "Search as a Service team",
     url: "https://yandex.com/",
+    period: "2022–2025",
   },
-  { role: "Founder", company: "CODE work" },
   {
     role: "Student",
     company: "Yandex School of Data Analysis",
+    summary: "Machine learning program",
     url: "https://shad.yandex.ru/",
+    period: "2023–2024",
   },
   {
-    role: "Software Engineering",
-    company: "Far Eastern Federal University",
-    url: "https://www.dvfu.ru/",
+    role: "Software Engineer",
+    company: "Databricks",
+    summary: "Neon Storage team",
+    url: "https://www.databricks.com/",
+    period: "2025–2026",
   },
 ];
 
@@ -73,7 +149,12 @@ export const LINKS: ProfileLink[] = [
   },
   {
     prefix: "linkedin.com/in/",
-    handle: "ephemeralsad",
-    href: "https://www.linkedin.com/in/ephemeralsad/",
+    handle: "eph5xx",
+    href: "https://www.linkedin.com/in/eph5xx/",
+  },
+  {
+    prefix: "x.com/",
+    handle: "eph5xx",
+    href: "https://x.com/eph5xx",
   },
 ];

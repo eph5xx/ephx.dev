@@ -49,22 +49,6 @@ export default function HomePage() {
         </div>
       </Section>
 
-      <Section title="Projects" id="projects">
-        <HoverList>
-          {PROJECTS.map((project, i) => (
-            <ListRow
-              key={project.url}
-              index={i}
-              href={project.url}
-              title={project.name}
-              detail={<>&mdash; {project.description}</>}
-              hideDetailOnMobile
-              meta={project.date}
-            />
-          ))}
-        </HoverList>
-      </Section>
-
       <Section title="Background" id="background">
         <HoverList>
           {BACKGROUND.map((item, i) => (
@@ -75,6 +59,23 @@ export default function HomePage() {
               title={item.role}
               detail={<>&middot; {item.company}</>}
               meta={item.period}
+              description={item.summary}
+            />
+          ))}
+        </HoverList>
+      </Section>
+
+      <Section title="Projects" id="projects">
+        <HoverList>
+          {PROJECTS.map((project, i) => (
+            <ListRow
+              key={project.name}
+              index={i}
+              href={project.url}
+              title={project.name}
+              detail={<>&mdash; {project.description}</>}
+              hideDetailOnMobile
+              meta={project.date}
             />
           ))}
         </HoverList>

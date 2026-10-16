@@ -33,10 +33,8 @@ subset() {
     --output-file="$OUT/$pkg-$weight.woff2"
 }
 
-fetch iosevka-aile
 fetch iosevka
 
-for w in 400 500 600 700; do subset iosevka-aile "$w"; done
 for w in 400 500; do subset iosevka "$w"; done
 
 ls -lh "$OUT"
