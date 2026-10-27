@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { ArrowDown } from "lucide-react";
-import { CopyCommand } from "@/components/home/copy-command";
 import { HoverList } from "@/components/home/hover-list";
 import { ListRow } from "@/components/home/list-row";
+import { ProjectRow } from "@/components/home/project-row";
 import { Section } from "@/components/home/section";
 import { LINKS, PROFILE, PROJECTS, SOCIAL } from "@/lib/constants";
 
@@ -11,6 +11,8 @@ export const metadata: Metadata = {
   title: { absolute: PROFILE.name },
   description: PROFILE.description,
 };
+
+const entity = "text-foreground font-semibold";
 
 const proseLink =
   "text-foreground decoration-foreground/30 hover:decoration-foreground underline underline-offset-4 transition-colors";
@@ -35,42 +37,17 @@ export default function HomePage() {
             {PROFILE.name}
           </h1>
           <p className="text-body text-base leading-relaxed text-pretty">
-            {PROFILE.tagline}
+            {PROFILE.tagline}{" "}
+            <a
+              href="#projects"
+              className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 whitespace-nowrap transition-colors"
+            >
+              Try any of them in a minute
+              <ArrowDown className="size-3.5" aria-hidden="true" />
+            </a>
           </p>
-          <a
-            href="#projects"
-            className="text-muted-foreground hover:text-foreground mt-1 inline-flex items-center gap-1 self-start text-sm transition-colors"
-          >
-            Three you can try in a minute
-            <ArrowDown className="size-3.5" aria-hidden="true" />
-          </a>
         </div>
       </section>
-
-      <Section title="Projects" id="projects">
-        <HoverList className="gap-1.5">
-          {PROJECTS.map((project, i) => (
-            <ListRow
-              key={project.name}
-              index={i}
-              href={project.url}
-              title={project.name}
-              detail={<>&mdash; {project.description}</>}
-              meta={project.date}
-              sub={
-                <span className="flex flex-wrap items-baseline gap-x-3">
-                  {project.install ? (
-                    <CopyCommand command={project.install} />
-                  ) : (
-                    <span>{project.note}</span>
-                  )}
-                  {project.proof && <span>{project.proof}</span>}
-                </span>
-              }
-            />
-          ))}
-        </HoverList>
-      </Section>
 
       <Section title="About" id="about">
         <div className="text-body flex flex-col gap-4 text-base leading-relaxed text-pretty">
@@ -100,30 +77,33 @@ export default function HomePage() {
         </div>
       </Section>
 
+      <Section title="Projects" id="projects">
+        <HoverList>
+          {PROJECTS.map((project, i) => (
+            <ProjectRow key={project.name} project={project} index={i} />
+          ))}
+        </HoverList>
+      </Section>
+
       <Section title="Background" id="background">
         <div className="text-body flex flex-col gap-4 text-base leading-relaxed text-pretty">
           <p>
-            I was a software engineer on Neon storage at{" "}
-            <strong className="text-foreground font-medium">Databricks</strong>,
-            and on the search platform at{" "}
-            <strong className="text-foreground font-medium">Yandex</strong>{" "}
-            before that. Earlier I founded{" "}
-            <strong className="text-foreground font-medium whitespace-nowrap">
-              CODE work
-            </strong>
-            , a volunteer group of 800+.
+            I worked on search infrastructure at{" "}
+            <strong className={entity}>Yandex</strong> and on Neon storage at{" "}
+            <strong className={entity}>Databricks</strong>. In university I
+            founded <strong className={entity}>CODE work</strong>, a student
+            volunteer organization that grew to 800+ people.
           </p>
           <p>
-            I studied software engineering at Far Eastern Federal University and
-            machine learning at the Yandex School of Data Analysis.
+            I have a bachelor&rsquo;s degree in software engineering from{" "}
+            <strong className={entity}>Far Eastern Federal University</strong>{" "}
+            and studied big data infrastructure at the{" "}
+            <strong className={entity}>Yandex School of Data Analysis</strong>.
           </p>
         </div>
       </Section>
 
       <Section title="Links" id="links">
-        <p className="text-body text-base leading-relaxed text-pretty">
-          Follow on X or LinkedIn to see each new tool when it ships.
-        </p>
         <HoverList>
           {LINKS.map((link, i) => (
             <ListRow

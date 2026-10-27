@@ -26,7 +26,7 @@ The personal site of Aleksandr Sarantsev at ephx.dev. A visit succeeds when the 
 
 ## Positioning
 
-Derived from confirmed facts, not yet stated by the owner in these words. Aleksandr has a background in large-scale infrastructure: the internal search platform at Yandex and the storage layer of Neon at Databricks. In 2026 Aleksandr turned to building small AI-agent tools that anyone can install with a single command or use on a live site. Most of the projects can be tried right away, so the work speaks for itself.
+Derived from confirmed facts, not yet stated by the owner in these words. Aleksandr has a background in large-scale infrastructure: the internal search platform at Yandex and the storage layer of Neon at Databricks. In 2026 Aleksandr turned to building small AI-agent tools that anyone can install with a single command or use on a live site. Most of the projects can be tried right away, so the work speaks for itself. The hero names no past employers: the owner does not want to be framed by where they used to work (owner, 2026-10-27). Employers appear only in Background.
 
 ## Operating Context
 
@@ -37,22 +37,22 @@ Derived from confirmed facts, not yet stated by the owner in these words. Aleksa
 
 ## Capabilities and Constraints
 
-- The site has one page (hero, Projects, About, Background, Links), plus the hidden articles and the static reports. Projects sit right under the hero so the work shows first (owner, 2026-10-27).
-- **Each project row shows how to try it**: a copyable install command, the live site, "Build from source", or "Private for now". Proof appears only when verified (TweakIdea: 55 stars, checked 2026-10-27). Projects are ordered by how quickly a visitor can try them.
-- **Background is a short paragraph**, not a list, with no acronyms (owner, 2026-10-27).
+- The site has one page (hero, About, Projects, Background, Links), plus the hidden articles and the static reports. About sits above Projects (owner, 2026-10-27).
+- **Each project row is two lines**: name and description, then start month and the way in. The way in is the address the row opens (repo, live site, or bot), styled as a link. No install commands on the site (owner, 2026-10-27). No status notes like "Build from source" or "Private for now", and no star counts or other numbers that drift (owner, 2026-10-27). Projects are ordered oldest first by start month (owner, 2026-10-27).
+- **Background is a short paragraph**, not a list, with no acronyms (owner, 2026-10-27). Its entities (Yandex, Databricks, CODE work, and both schools) are semibold. The owner chose the work line: "I worked on search infrastructure at Yandex and on Neon storage at Databricks." The FEFU line names the bachelor's degree.
 - It is deployed on Cloudflare Workers via OpenNext. PostHog analytics are proxied through `/_relay`.
 - **The prose was rewritten on 2026-10-27.** The owner flagged the old tagline and About as untrue. The replacements use only confirmed facts. Never restore the old lines ("I love building things that actually help people", "searching for good problems to solve").
 - **Current stance: building their own projects full-time for the next couple of months** (confirmed 2026-10-27). The owner is happy to talk about building something together or a good opportunity, and the About section says so. The owner is not taking paid work right now. The site does not say the owner is seeking investors. Add nothing beyond this without the owner's word.
-- **Follow promise: "see each new tool when it ships."** The owner chose it on 2026-10-27 and will post each launch on X and LinkedIn. Don't promise anything the feed doesn't deliver (weekly updates, tutorials).
+- **The Links section holds only the links**, with no sentence above them (owner, 2026-10-27). The owner posts each launch on X and LinkedIn; if a follow line ever returns, don't promise anything the feed doesn't deliver (weekly updates, tutorials).
 - **The site lists exactly five projects**: TweakIdea, Surf Skills, Tiebreaker, Touchless, and Fjords. The owner confirmed all five stay. Six unfinished projects (Foglight Connectivity, Biviu, Design Mascot, Foglight Agent Builder, Foglight Vibe Clustering, Foglight Jobs) were removed on 2026-10-27. Do not bring them back until the owner says they are done.
-- Project links go out to each project's repo or live site. Projects get no pages on this site. A project with no public link is listed without one.
+- Project links go out to each project's repo, live site, or bot. Projects get no pages on this site.
 
 ### Confirmed by the owner over repo evidence
 
-The owner confirmed the site's descriptions and start months for these two projects (2026-10-27). Each current repo began later than the project itself, so do not "correct" the dates from commit history.
+The owner confirmed the site's descriptions and start months for these two projects (2026-10-27), and wrote all five project descriptions on the site. Each current repo began later than the project itself, so do not "correct" the dates from commit history.
 
-- **Fjords** (started 05.2026). The current private repo, from 2026-10, is an early MVP of a Telegram motivation-coach bot limited to two allowed users. The site's description is the owner's. The project has no public link.
-- **Touchless** (started 07.2026). The current public repo is from 2026-10. It has one plugin (Vocabulary Coach), and its only release is an unpublished draft, so visitors can only build it from source. It has no license file. On 2026-10-27 the owner approved replacing its description with "macOS menu-bar voice-to-text app with plugins", dropping "world-class" and the plugins that don't exist yet.
+- **Fjords** (started 05.2026). An agent that helps you achieve your goals, running as the Telegram bot t.me/fjordsgoalbot. The owner says it is not private. The repo (private, from 2026-10) still lets only listed users in and sends everyone else to a waitlist. The hero says "Try any of them in a minute" (owner's wording, 2026-10-27).
+- **Touchless** (started 07.2026). The current public repo is from 2026-10. It has one plugin (Vocabulary Coach), and its only release is an unpublished draft, so visitors can only build it from source. The site does not say so; it shows the repo address. It has no license file. The site's description is "macOS voice-to-text app, plugin-friendly" (owner, 2026-10-27).
 
 
 ## Brand Commitments
@@ -65,9 +65,9 @@ The owner confirmed the site's descriptions and start months for these two proje
 ### Background (confirmed)
 
 - B.S., FEFU, Software Engineering, 2018–2022
-- Founder, CODE work, 800+ volunteers, 2021–2022
-- SWE, Yandex, Search as a Service, 2022–2025
-- Student, YSDA (Yandex School of Data Analysis), Machine Learning, 2023–2024
+- Founder, CODE work, a student volunteer organization with 800+ participants, 2021–2022
+- SWE, Yandex, Search as a Service, 2022–2025: internal search and database (DBaaS) infrastructure, per the owner's profile notes
+- Student, YSDA (Yandex School of Data Analysis), Big Data Infrastructure, 2023–2024 (not Machine Learning; corrected by the owner on 2026-10-27)
 - SWE, Databricks, Neon Storage, 2025–2026
 
 ### Projects (repo state verified 2026-10-27; start months confirmed by the owner)
@@ -78,7 +78,7 @@ The owner confirmed the site's descriptions and start months for these two proje
 | Surf Skills | Curated directory of open-source AI agent skills, each with a preview video of its output. | Live, free. About 41 skills in 26 collections. MIT (logos and screenshots excluded). | Visit the site | surfskills.surf | 06.2026 |
 | Tiebreaker | Claude Code skill that settles a decision with a weighted scoring matrix. | Usable. No releases. 2 stars, MIT. | `npx skills add eph5xx/tiebreaker` | github.com/eph5xx/tiebreaker | 07.2026 |
 | Touchless | macOS menu-bar voice-to-text app (ElevenLabs or local Whisper) with a plugin system; one plugin so far. | Working but rough. No public release. No license. | Build from source | github.com/eph5xx/touchless | 07.2026 |
-| Fjords | AI cofounder (owner's description). The current repo is a Telegram motivation-coach bot. | Private early MVP | Not possible | None public | 05.2026 |
+| Fjords | Agent that helps you achieve your goals (owner's description). Runs as a Telegram bot. | Early MVP; repo admits listed users, others get a waitlist | Open the bot | t.me/fjordsgoalbot | 05.2026 |
 
 ### Proof assets
 

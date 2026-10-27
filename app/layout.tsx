@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { iosevka, schibstedGrotesk } from "@/app/fonts";
+import { plexMono, plexSans } from "@/app/fonts";
 import { MotionProvider } from "@/components/providers/motion-provider";
 import { PostHogProvider } from "@/components/providers/posthog-provider";
 import { SiteFooter } from "@/components/layout/site-footer";
@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${schibstedGrotesk.variable} ${iosevka.variable}`}
+      className={`${plexSans.variable} ${plexMono.variable}`}
     >
       <body className="bg-background text-foreground font-sans antialiased">
         <MotionProvider>
