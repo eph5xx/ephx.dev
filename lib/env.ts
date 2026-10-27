@@ -11,13 +11,11 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 const REQUIRED_SECRETS = [
   "ANTHROPIC_API_KEY",
   "AI_GATEWAY_TOKEN",
-  "POSTHOG_API_KEY",
 ] as const satisfies readonly (keyof CloudflareEnv)[];
 
 const REQUIRED_VARS = [
   "CF_ACCOUNT_ID",
   "AI_GATEWAY_NAME",
-  "POSTHOG_HOST",
 ] as const satisfies readonly (keyof CloudflareEnv)[];
 
 const REQUIRED_BINDINGS = [

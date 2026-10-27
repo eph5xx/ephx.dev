@@ -39,20 +39,53 @@ describe("app/%5Frelay/[...path]/route.ts — PostHog reverse proxy", () => {
     expect(url).toContain("us-assets.i.posthog.com");
   });
 
-  it("strips cf-connecting-ip and host headers", async () => {
+  it("forwards the visitor IP as x-forwarded-for", async () => {
     await POST(
       makeReq("https://ephx.dev/_relay/capture", {
         method: "POST",
-        headers: { "cf-connecting-ip": "1.2.3.4", host: "ephx.dev", "x-forwarded-for": "1.2.3.4" },
+        headers: {
+          "cf-connecting-ip": "1.2.3.4",
+          "cf-ray": "abc",
+          host: "ephx.dev",
+          "x-forwarded-for": "9.9.9.9",
+        },
         body: "{}",
       }),
       makeCtx(["capture"]),
     );
     const init = fetchMock.mock.calls[0][1] as RequestInit;
     const headers = init.headers as Headers;
+    expect(headers.get("x-forwarded-for")).toBe("1.2.3.4");
     expect(headers.get("cf-connecting-ip")).toBeNull();
+    expect(headers.get("cf-ray")).toBeNull();
     expect(headers.get("host")).toBeNull();
+  });
+
+  it("drops a client-supplied x-forwarded-for when there is no cf-connecting-ip", async () => {
+    await POST(
+      makeReq("https://ephx.dev/_relay/capture", {
+        method: "POST",
+        headers: { "x-forwarded-for": "9.9.9.9" },
+        body: "{}",
+      }),
+      makeCtx(["capture"]),
+    );
+    const headers = (fetchMock.mock.calls[0][1] as RequestInit).headers as Headers;
     expect(headers.get("x-forwarded-for")).toBeNull();
+  });
+
+  it("strips cookie and authorization request headers", async () => {
+    await POST(
+      makeReq("https://ephx.dev/_relay/capture", {
+        method: "POST",
+        headers: { cookie: "session=secret", authorization: "Bearer x" },
+        body: "{}",
+      }),
+      makeCtx(["capture"]),
+    );
+    const headers = (fetchMock.mock.calls[0][1] as RequestInit).headers as Headers;
+    expect(headers.get("cookie")).toBeNull();
+    expect(headers.get("authorization")).toBeNull();
   });
 
   it("strips set-cookie from response (cookieless D-19)", async () => {

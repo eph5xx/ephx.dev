@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { plexMono, plexSans } from "@/app/fonts";
 import { MotionProvider } from "@/components/providers/motion-provider";
-import { PostHogProvider } from "@/components/providers/posthog-provider";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { PROFILE, SITE_NAME } from "@/lib/constants";
 import "./globals.css";
@@ -35,12 +34,10 @@ export default function RootLayout({
     >
       <body className="bg-background text-foreground font-sans antialiased">
         <MotionProvider>
-          <PostHogProvider>
-            <div className="mx-auto flex min-h-screen w-full max-w-3xl flex-col gap-12 py-6 md:py-8 lg:py-10">
-              <main className="flex flex-1 flex-col">{children}</main>
-              <SiteFooter />
-            </div>
-          </PostHogProvider>
+          <div className="mx-auto flex min-h-screen w-full max-w-3xl flex-col gap-12 py-6 md:py-8 lg:py-10">
+            <main className="flex flex-1 flex-col">{children}</main>
+            <SiteFooter />
+          </div>
         </MotionProvider>
       </body>
     </html>
