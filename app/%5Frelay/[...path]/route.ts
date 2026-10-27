@@ -1,7 +1,9 @@
 // app/_relay/[...path]/route.ts
 // PostHog reverse proxy. Adblocker-safe path; forwards ingest traffic
-// to PostHog's US cluster while stripping Cloudflare/forwarded headers
-// and PostHog's set-cookie response (D-19 cookieless invariant).
+// to PostHog's US cluster. Forwards the visitor IP as x-forwarded-for so
+// PostHog's cookieless daily hash can tell visitors apart (PostHog discards
+// the IP after hashing). Strips cookies, auth, Cloudflare headers, and
+// PostHog's set-cookie response.
 //
 // Source: CONTEXT.md D-17, D-19
 // Source: RESEARCH.md §Pattern 3, §Pitfall 2, §Pitfall 6
@@ -36,17 +38,19 @@ async function relay(
   const upstreamUrl = new URL(`/${joined}`, upstreamBase);
   upstreamUrl.search = new URL(req.url).search;
 
-  // Clone request headers, then strip Cloudflare + forwarded headers so
-  // PostHog sees its own host and never the client IP (D-16 ip: false
-  // is a second floor on top of this strip).
   const headers = new Headers(req.headers);
+  const visitorIp = headers.get("cf-connecting-ip");
+  for (const name of [...headers.keys()]) {
+    if (name.startsWith("cf-")) headers.delete(name);
+  }
   headers.delete("host");
-  headers.delete("cf-connecting-ip");
-  headers.delete("cf-ray");
-  headers.delete("cf-visitor");
-  headers.delete("x-forwarded-for");
+  headers.delete("cookie");
+  headers.delete("authorization");
   headers.delete("x-forwarded-host");
   headers.delete("x-forwarded-proto");
+  // Replace, never append: a client-supplied x-forwarded-for is untrusted.
+  headers.delete("x-forwarded-for");
+  if (visitorIp) headers.set("x-forwarded-for", visitorIp);
 
   const init: RequestInit = {
     method: req.method,
@@ -61,9 +65,7 @@ async function relay(
 
   const upstream = await fetch(upstreamUrl.toString(), init);
 
-  // Strip cookies PostHog might set — we're cookieless (D-19) and
-  // persistence: "memory" in the client provider is the primary control;
-  // this is belt-and-suspenders.
+  // The site is cookieless; never let PostHog set one through our origin.
   const responseHeaders = new Headers(upstream.headers);
   responseHeaders.delete("set-cookie");
 

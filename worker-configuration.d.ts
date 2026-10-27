@@ -11,10 +11,8 @@ declare namespace Cloudflare {
 		ASSETS: Fetcher;
 		CF_ACCOUNT_ID: "REPLACE_WITH_CLOUDFLARE_ACCOUNT_ID";
 		AI_GATEWAY_NAME: "tweakidea";
-		POSTHOG_HOST: "https://us.i.posthog.com";
 		ANTHROPIC_API_KEY: string;
 		AI_GATEWAY_TOKEN: string;
-		POSTHOG_API_KEY: string;
 	}
 }
 interface CloudflareEnv extends Cloudflare.Env {}
@@ -22,7 +20,7 @@ type StringifyValues<EnvType extends Record<string, unknown>> = {
 	[Binding in keyof EnvType]: EnvType[Binding] extends string ? EnvType[Binding] : string;
 };
 declare namespace NodeJS {
-	interface ProcessEnv extends StringifyValues<Pick<Cloudflare.Env, "CF_ACCOUNT_ID" | "AI_GATEWAY_NAME" | "POSTHOG_HOST" | "ANTHROPIC_API_KEY" | "AI_GATEWAY_TOKEN" | "POSTHOG_API_KEY">> {}
+	interface ProcessEnv extends StringifyValues<Pick<Cloudflare.Env, "CF_ACCOUNT_ID" | "AI_GATEWAY_NAME" | "ANTHROPIC_API_KEY" | "AI_GATEWAY_TOKEN">> {}
 }
 
 // Begin runtime types
