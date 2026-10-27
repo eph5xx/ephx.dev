@@ -1,7 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 
 // Intercept the global fetch that the relay handler calls
-const fetchMock = vi.fn(async () => new Response("ok", { status: 200 }));
+const fetchMock = vi.fn<typeof fetch>(
+  async () => new Response("ok", { status: 200 })
+);
 vi.stubGlobal("fetch", fetchMock);
 
 // IMPORTANT: source folder is `%5Frelay` (URL-encoded `_`) so Next.js

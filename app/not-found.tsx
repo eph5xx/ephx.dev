@@ -1,37 +1,19 @@
-"use client";
-
-import * as m from "motion/react-m";
 import Link from "next/link";
 
 export default function NotFound() {
   return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-8 py-20">
-      <m.h1
-        className="text-[120px] font-bold leading-none tracking-tighter text-accent md:text-[180px]"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{
-          opacity: 1,
-          y: [0, -8, 0],
-        }}
-        transition={{
-          opacity: { duration: 0.5 },
-          y: {
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut",
-          },
-        }}
-      >
+    <div className="flex flex-1 flex-col items-start justify-center gap-4 px-4 py-20 md:px-6">
+      <h1 className="text-foreground font-mono text-6xl font-medium tracking-tight md:text-7xl">
         404
-      </m.h1>
-      <p className="text-lg text-muted-foreground">
+      </h1>
+      <p className="text-body text-base">
         This page wandered off. Let&apos;s get you back.
       </p>
       <Link
         href="/"
-        className="text-accent underline underline-offset-4 transition-colors hover:text-accent/80"
+        className="text-muted-foreground hover:text-foreground font-mono text-sm transition-colors"
       >
-        Go home
+        &larr; Home
       </Link>
     </div>
   );

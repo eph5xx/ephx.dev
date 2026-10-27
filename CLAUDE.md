@@ -1,6 +1,6 @@
 # ephx.dev
 
-Personal article website. Each article is a hand-crafted React page with unique creative content — not markdown/CMS. Companion to social media posts with detailed articles linked from social content.
+Personal website with a single-column home page (hero, About, Projects, Background, Links). Legacy articles are hand-crafted React pages (not markdown/CMS) that stay reachable at `/a/[slug]` but are not listed anywhere on the site.
 
 ## Commands
 
@@ -16,9 +16,11 @@ Personal article website. Each article is a hand-crafted React page with unique 
 ## Constraints
 
 - **Cloudflare Workers** via OpenNext (`output: 'standalone'` in next.config.ts)
-- **Dark mode only** — `<html className="dark">` hardcoded in root layout
+- **System theme** — follows the system light/dark setting via `prefers-color-scheme`, with the light palette in `:root` and the dark palette in a media query
 - Each article = custom React component (no markdown, no MDX, no CMS)
 - Mobile-responsive required
+- One `max-w-3xl` column for every page (home, articles, footer); blocks inside it use `px-4 md:px-6`. No site header: pages start with their own content
+- Fonts: IBM Plex Sans (`font-sans`) for text and IBM Plex Mono (`font-mono`) for code, dates, labels, and addresses, both via `next/font/google` (self-hosted at build time)
 
 ## Project Structure
 
@@ -26,24 +28,24 @@ Personal article website. Each article is a hand-crafted React page with unique 
 open-next.config.ts   OpenNext configuration (incremental cache, cache interception)
 wrangler.jsonc        Cloudflare Workers config (entry point, assets, compat flags)
 app/
-  layout.tsx            Root layout: GeistSans + GeistMono fonts, dark mode, SiteHeader/SiteFooter
-  page.tsx              Home page: article grid from getPublishedArticles()
-  globals.css           Tailwind v4 CSS-first config (@theme), OKLCH color palette
-  about/page.tsx        About page
+  layout.tsx            Root layout: fonts, system theme, max-w-3xl column, SiteFooter
+  fonts.ts              IBM Plex Sans + IBM Plex Mono (next/font/google)
+  page.tsx              Home page: hero, About, Projects, Background, Links
+  globals.css           Tailwind v4 CSS-first config (@theme), OKLCH palette, .reveal animation
   a/[slug]/page.tsx     Article route: generateStaticParams + generateMetadata
-  not-found.tsx         Animated 404
-  sitemap.ts            Dynamic sitemap from articles registry
+  not-found.tsx         404
+  sitemap.ts            Dynamic sitemap (home + articles)
 components/
-  layout/               site-header, site-footer, mobile-nav (Sheet-based)
-  home/                 article-card, gradient-mesh
+  layout/               site-footer
+  home/                 section, hover-list (sliding highlight), project-row, list-row
   articles/             article-header, reading-progress
   articles/content/     Per-article content components (one .tsx per article)
   ui/                   shadcn/ui + Magic UI components (button, sheet, etc.)
-  icons/                github, linkedin SVG icons
+  icons/                github SVG icon
   providers/            motion-provider (LazyMotion wrapper)
 lib/
   articles.ts           Article registry + content loader map — SINGLE SOURCE OF TRUTH
-  constants.ts          SITE_NAME, SOCIAL_LINKS, NAV_ITEMS
+  constants.ts          SITE_NAME + home page data: PROFILE, PROJECTS, SOCIAL, LINKS
   utils.ts              cn() utility (clsx + twMerge)
 ```
 
@@ -59,7 +61,13 @@ lib/
    "my-slug": () => import("@/components/articles/content/my-slug"),
    ```
 
-That's it. Routing (`/a/my-slug`), metadata, OG tags, sitemap, and home page grid all derive from the registry automatically.
+That's it. Routing (`/a/my-slug`), metadata, OG tags, and sitemap derive from the registry automatically. Articles are not listed on the home page.
+
+## Updating Home Page Content
+
+- Projects (oldest first; each shows its URL) and Links: edit the arrays in `lib/constants.ts`
+- Tagline and description: `PROFILE` in `lib/constants.ts`
+- About and Background paragraphs: hand-written JSX in `app/page.tsx`
 
 ### Article Content Component Pattern
 
@@ -74,7 +82,7 @@ That's it. Routing (`/a/my-slug`), metadata, OG tags, sitemap, and home page gri
 
 | Package | Purpose |
 |---------|---------|
-| next 15.5.x | Framework (standalone mode via OpenNext) |
+| next 16.4.x | Framework (standalone mode via OpenNext) |
 | react 19.1.x | UI rendering |
 | tailwindcss v4 | Styling (CSS-first @theme config, OKLCH colors) |
 | motion ^12.38 | Animation engine (`motion/react`, `motion/react-m`) |
@@ -84,7 +92,7 @@ That's it. Routing (`/a/my-slug`), metadata, OG tags, sitemap, and home page gri
 | class-variance-authority | Typed component variants (cva) |
 | tw-animate-css | CSS animation utilities |
 | lucide-react | Icons |
-| geist | Typography (GeistSans + GeistMono via next/font) |
+| IBM Plex Sans + Mono | Text and mono typography (`next/font/google`, self-hosted at build time, OFL-1.1) |
 | @opennextjs/cloudflare | Cloudflare Workers adapter for Next.js |
 
 ## Conventions

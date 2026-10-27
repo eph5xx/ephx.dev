@@ -24,7 +24,7 @@ async function relay(
   req: NextRequest,
   { params }: { params: Promise<{ path: string[] }> },
 ): Promise<Response> {
-  const { path } = await params; // Next 15: params is a Promise
+  const { path } = await params; // params is a Promise (Next 15+)
   const joined = path.join("/");
 
   // PostHog splits static assets (array.js, surveys) onto us-assets.

@@ -42,6 +42,7 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
     // Idempotency guard for React 19 strict-mode double-mounting (Pitfall 8).
     // If posthog is already initialized, just flip ready — don't re-init.
     if (posthog.__loaded) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional post-init gate (WR-02)
       setReady(true);
       return;
     }
