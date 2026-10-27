@@ -82,7 +82,7 @@ That's it. Routing (`/a/my-slug`), metadata, OG tags, and sitemap derive from th
 
 | Package | Purpose |
 |---------|---------|
-| next 15.5.x | Framework (standalone mode via OpenNext) |
+| next 16.4.x | Framework (standalone mode via OpenNext) |
 | react 19.1.x | UI rendering |
 | tailwindcss v4 | Styling (CSS-first @theme config, OKLCH colors) |
 | motion ^12.38 | Animation engine (`motion/react`, `motion/react-m`) |
