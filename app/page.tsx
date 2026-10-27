@@ -38,14 +38,15 @@ export default function HomePage() {
       <Section title="About" id="about">
         <div className="text-body flex flex-col gap-4 text-base leading-relaxed text-pretty">
           <p>
-            Most recently I worked on the core storage layer of a serverless
-            Postgres platform at{" "}
+            Before this: search at{" "}
+            <strong className="text-foreground font-medium">Yandex</strong>,
+            storage at{" "}
             <strong className="text-foreground font-medium">Databricks</strong>.
-            Before that I spent nearly three years building the internal search
-            platform at{" "}
-            <strong className="text-foreground font-medium">Yandex</strong>.
           </p>
-          <p>Right now I&apos;m searching for good problems to solve.</p>
+          <p>
+            Now I work on my own projects full-time. Message me on X or
+            LinkedIn.
+          </p>
         </div>
       </Section>
 

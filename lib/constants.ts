@@ -2,17 +2,17 @@ export const SITE_NAME = "ephx.dev" as const;
 
 export const PROFILE = {
   name: "Aleksandr Sarantsev",
-  tagline:
-    "Software engineer. I love building things that actually help people.",
+  tagline: "Software engineer building tools for AI agents.",
   description:
-    "Aleksandr Sarantsev, software engineer. Projects, background, and links.",
+    "Aleksandr Sarantsev, software engineer building tools for AI agents. Projects, background, and links.",
   avatar: "/ava.jpg",
 } as const;
 
 export interface Project {
   name: string;
   description: string;
-  url: string;
+  /** Repo or live site; omit when there is no public link yet */
+  url?: string;
   /** Launch month, formatted as MM.YYYY */
   date?: string;
 }
@@ -34,74 +34,38 @@ export interface ProfileLink {
   href: string;
 }
 
-// Placeholder target until each project gets its own page.
-const PROJECT_URL = "https://ephx.dev";
-
 export const PROJECTS: Project[] = [
   {
     name: "TweakIdea",
     description: "Claude Code skill that scores startup ideas.",
-    url: PROJECT_URL,
+    url: "https://github.com/eph5xx/tweakidea",
     date: "04.2026",
-  },
-  {
-    name: "Foglight Connectivity",
-    description:
-      "Connectivity, memory, and RAG for agents, plus corpus building.",
-    url: PROJECT_URL,
-    date: "04.2026",
-  },
-  {
-    name: "Biviu",
-    description:
-      "Paradigm-style AI tables for decisions, shown on a people database.",
-    url: PROJECT_URL,
-    date: "05.2026",
   },
   {
     name: "Fjords",
     description:
       "AI cofounder: dashboard, social media, distribution, AI investor. Pluginizable.",
-    url: PROJECT_URL,
     date: "05.2026",
   },
   {
     name: "Surf Skills",
     description: "Directory of AI agent skills, each shown actually working.",
-    url: PROJECT_URL,
+    url: "https://surfskills.surf",
     date: "06.2026",
   },
   {
-    name: "Design Mascot",
-    description: "Paste a link, get a mascot sketched to match your site.",
-    url: PROJECT_URL,
+    name: "Tiebreaker",
+    description:
+      "Claude Code skill that settles decisions with a weighted scoring matrix.",
+    url: "https://github.com/eph5xx/tiebreaker",
     date: "07.2026",
   },
   {
     name: "Touchless",
     description:
       "World-class mic capture with plugins: tutor, idea capture, and more.",
-    url: PROJECT_URL,
+    url: "https://github.com/eph5xx/touchless",
     date: "07.2026",
-  },
-  {
-    name: "Foglight Agent Builder",
-    description:
-      "AI setup app for building agents, with custom search relevance.",
-    url: PROJECT_URL,
-    date: "08.2026",
-  },
-  {
-    name: "Foglight Vibe Clustering",
-    description: "Cluster anything by vibe.",
-    url: PROJECT_URL,
-    date: "09.2026",
-  },
-  {
-    name: "Foglight Jobs",
-    description: "Foglight applied to hiring and job search.",
-    url: PROJECT_URL,
-    date: "10.2026",
   },
 ];
 
