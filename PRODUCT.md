@@ -37,10 +37,13 @@ Derived from confirmed facts, not yet stated by the owner in these words. Aleksa
 
 ## Capabilities and Constraints
 
-- The site has one page (hero, About, Background, Projects, Links), plus the hidden articles and the static reports.
+- The site has one page (hero, Projects, About, Background, Links), plus the hidden articles and the static reports. Projects sit right under the hero so the work shows first (owner, 2026-10-27).
+- **Each project row shows how to try it**: a copyable install command, the live site, "Build from source", or "Private for now". Proof appears only when verified (TweakIdea: 55 stars, checked 2026-10-27). Projects are ordered by how quickly a visitor can try them.
+- **Background is a short paragraph**, not a list, with no acronyms (owner, 2026-10-27).
 - It is deployed on Cloudflare Workers via OpenNext. PostHog analytics are proxied through `/_relay`.
 - **The prose was rewritten on 2026-10-27.** The owner flagged the old tagline and About as untrue. The replacements use only confirmed facts. Never restore the old lines ("I love building things that actually help people", "searching for good problems to solve").
-- **Current stance: building their own projects full-time** (confirmed 2026-10-27). The site does not say the owner is open to a job, looking for a cofounder, or seeking investors. Add none of those without the owner's word.
+- **Current stance: building their own projects full-time for the next couple of months** (confirmed 2026-10-27). The owner is happy to talk about building something together or a good opportunity, and the About section says so. The owner is not taking paid work right now. The site does not say the owner is seeking investors. Add nothing beyond this without the owner's word.
+- **Follow promise: "see each new tool when it ships."** The owner chose it on 2026-10-27 and will post each launch on X and LinkedIn. Don't promise anything the feed doesn't deliver (weekly updates, tutorials).
 - **The site lists exactly five projects**: TweakIdea, Surf Skills, Tiebreaker, Touchless, and Fjords. The owner confirmed all five stay. Six unfinished projects (Foglight Connectivity, Biviu, Design Mascot, Foglight Agent Builder, Foglight Vibe Clustering, Foglight Jobs) were removed on 2026-10-27. Do not bring them back until the owner says they are done.
 - Project links go out to each project's repo or live site. Projects get no pages on this site. A project with no public link is listed without one.
 
@@ -49,7 +52,7 @@ Derived from confirmed facts, not yet stated by the owner in these words. Aleksa
 The owner confirmed the site's descriptions and start months for these two projects (2026-10-27). Each current repo began later than the project itself, so do not "correct" the dates from commit history.
 
 - **Fjords** (started 05.2026). The current private repo, from 2026-10, is an early MVP of a Telegram motivation-coach bot limited to two allowed users. The site's description is the owner's. The project has no public link.
-- **Touchless** (started 07.2026). The current public repo is from 2026-10. It has one plugin (Vocabulary Coach), and its only release is an unpublished draft, so visitors can only build it from source. It has no license file.
+- **Touchless** (started 07.2026). The current public repo is from 2026-10. It has one plugin (Vocabulary Coach), and its only release is an unpublished draft, so visitors can only build it from source. It has no license file. On 2026-10-27 the owner approved replacing its description with "macOS menu-bar voice-to-text app with plugins", dropping "world-class" and the plugins that don't exist yet.
 
 
 ## Brand Commitments

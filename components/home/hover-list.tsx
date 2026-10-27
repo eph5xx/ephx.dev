@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { useAnimate, useReducedMotion } from "motion/react";
+import { cn } from "@/lib/utils";
 
 const SPRING = {
   type: "spring",
@@ -14,7 +15,13 @@ const SPRING = {
  * List with a single highlight that slides between hovered/focused rows.
  * Rows mark themselves with `data-hover-item` (see ListRow).
  */
-export function HoverList({ children }: { children: React.ReactNode }) {
+export function HoverList({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   const listRef = useRef<HTMLUListElement>(null);
   const [bgRef, animate] = useAnimate<HTMLSpanElement>();
   const activeItem = useRef<Element | null>(null);
@@ -56,7 +63,7 @@ export function HoverList({ children }: { children: React.ReactNode }) {
   return (
     <ul
       ref={listRef}
-      className="relative isolate flex flex-col"
+      className={cn("relative isolate flex flex-col", className)}
       onMouseOver={(e) => moveTo(e.target)}
       onFocus={(e) => moveTo(e.target)}
       onMouseLeave={hide}
