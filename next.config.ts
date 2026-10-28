@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   images: {
     unoptimized: true,
   },
+  // PostHog API paths end in "/" (e.g. /i/v0/e/); a 308 to the slashless
+  // path would stop /_relay from passing them through unchanged.
+  skipTrailingSlashRedirect: true,
   async redirects() {
     return [{ source: "/about", destination: "/", permanent: true }];
   },
