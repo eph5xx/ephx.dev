@@ -73,7 +73,8 @@ you'd need to delete old logs or upgrade).
 
 ## 3. Create the PostHog project
 
-Analytics run on the home page (`/`) only, in cookieless mode. They are set
+Analytics run on the home page (`/`) only, with memory persistence (no
+cookies or browser storage). They are set
 up in `instrumentation-client.ts` and sent through the `/_relay` proxy to
 PostHog US. Articles, the 404 page, and `/reports/*` send nothing.
 
@@ -93,9 +94,8 @@ PostHog US. Articles, the 404 page, and `/reports/*` send nothing.
    **Build** → **Variables** and add `NEXT_PUBLIC_POSTHOG_KEY=phc_...` as a
    **build** variable. `next build` fails with a clear error when the key is
    missing, so Git builds break without it.
-6. In PostHog, go to **Settings** → **Project** → **Web analytics**, turn on
-   **Enable cookieless tracking**, and save. The client uses
-   `cookieless_mode: "always"`, which needs this toggle on the server side.
+6. Optional: in PostHog **Settings** → **Project**, turn on **Discard client
+   IP data**. Events still get a country; the raw IP is just not stored.
 7. Under **Project Settings** → **Recordings**, confirm **Session Recording**
    is OFF (it should be by default). The client also disables it.
 ---
@@ -269,6 +269,7 @@ grep -r "phc_" .open-next/assets/_next/static/chunks/ 2>/dev/null | head -3
 | `npm run build` succeeds but grepping `.open-next/assets/_next/static/chunks/` for `phc_` returns zero matches | `NEXT_PUBLIC_POSTHOG_KEY` was not set in the shell OR `.env.production` when `next build` ran | Ensure the variable is set before `next build` — either export it in the shell or commit it to `.env.production` (gitignored) |
 | Browser network tab shows `/_relay/capture` returning 500 | PostHog ingest host unreachable, or relay route not deployed | Check Cloudflare Workers logs via `wrangler tail`; the relay targets PostHog US (`us.i.posthog.com`), so the project must be in the US region |
 | PostHog live events feed is empty after visiting `/` | Adblocker or `/_relay` route handler not deployed | Disable adblocker to confirm the proxy is the issue; check `wrangler dev` output for any 404s on `/_relay/*` paths |
+| Events arrive but `$geoip_country_name` is empty | `cookieless_mode` is back in `instrumentation-client.ts` (it drops the IP before PostHog looks up the country) | Remove it. Older events are not backfilled |
 
 ---
 
