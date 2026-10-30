@@ -20,7 +20,7 @@ Personal website with a single-column home page (hero, About, Projects, Backgrou
 - Each article = custom React component (no markdown, no MDX, no CMS)
 - Mobile-responsive required
 - One `max-w-3xl` column for every page (home, articles, footer); blocks inside it use `px-4 md:px-6`. No site header: pages start with their own content
-- **Analytics** — PostHog, home page (`/`) only, cookieless. Set up in `instrumentation-client.ts` (pageviews, autocapture, `outbound_link_clicked`) and sent through the `/_relay` proxy. `next build` fails without `NEXT_PUBLIC_POSTHOG_KEY`
+- **Analytics** — PostHog, home page (`/`) only, no cookies or browser storage (memory persistence); location from PostHog GeoIP via the IP forwarded by `/_relay`. Set up in `instrumentation-client.ts` (pageviews, autocapture, `outbound_link_clicked`) and sent through the `/_relay` proxy. `next build` fails without `NEXT_PUBLIC_POSTHOG_KEY`
 - Fonts: IBM Plex Sans (`font-sans`) for text and IBM Plex Mono (`font-mono`) for code, dates, labels, and addresses, both via `next/font/google` (self-hosted at build time)
 
 ## Project Structure
@@ -28,7 +28,7 @@ Personal website with a single-column home page (hero, About, Projects, Backgrou
 ```
 open-next.config.ts   OpenNext configuration (incremental cache, cache interception)
 wrangler.jsonc        Cloudflare Workers config (entry point, assets, compat flags)
-instrumentation-client.ts  PostHog init (home page only, cookieless) + outbound link event
+instrumentation-client.ts  PostHog init (home page only, memory persistence) + outbound link event
 app/
   layout.tsx            Root layout: fonts, system theme, max-w-3xl column, SiteFooter
   fonts.ts              IBM Plex Sans + IBM Plex Mono (next/font/google)

@@ -1,9 +1,9 @@
 // app/_relay/[...path]/route.ts
 // PostHog reverse proxy. Adblocker-safe path; forwards ingest traffic
 // to PostHog's US cluster. Forwards the visitor IP as x-forwarded-for so
-// PostHog's cookieless daily hash can tell visitors apart (PostHog discards
-// the IP after hashing). Strips cookies, auth, Cloudflare headers, and
-// PostHog's set-cookie response.
+// PostHog's GeoIP can find the visitor's location (the project discards the
+// IP after GeoIP). Strips cookies, auth, Cloudflare headers, and PostHog's
+// set-cookie response.
 //
 // Source: CONTEXT.md D-17, D-19
 // Source: RESEARCH.md §Pattern 3, §Pitfall 2, §Pitfall 6
