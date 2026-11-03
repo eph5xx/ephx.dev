@@ -57,6 +57,13 @@ export const PROJECTS: Project[] = [
     url: "https://github.com/eph5xx/touchless",
     date: "07.2026",
   },
+  {
+    name: "Biviu",
+    description:
+      "Web research engine that finds, enriches and ranks any entities. Waitlist-only.",
+    url: "https://biviu.com",
+    date: "11.2026",
+  },
 ];
 
 export const SOCIAL = {
