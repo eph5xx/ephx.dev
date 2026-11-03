@@ -52,7 +52,7 @@ Derived from confirmed facts, not yet stated by the owner in these words. Aleksa
 The owner confirmed the site's descriptions and start months for these two projects (2026-10-27), and wrote all five project descriptions on the site. Each current repo began later than the project itself, so do not "correct" the dates from commit history.
 
 - **Fjords** (started 05.2026). An agent that helps you achieve your goals, running as the Telegram bot t.me/fjordsgoalbot. The owner says it is not private. The repo (private, from 2026-10) still lets only listed users in and sends everyone else to a waitlist. The hero says "Try any of them in a minute" (owner's wording, 2026-10-27).
-- **Touchless** (started 07.2026). The current public repo is from 2026-10. It has one plugin (Vocabulary Coach), and its only release is an unpublished draft, so visitors can only build it from source. The site does not say so; it shows the repo address. It has no license file. The site's description is "macOS voice-to-text app, plugin-friendly" (owner, 2026-10-27).
+- **Touchless** (started 08.2026). The current public repo is from 2026-10. It has one plugin (Vocabulary Coach), and its only release is an unpublished draft, so visitors can only build it from source. The site does not say so; it shows the repo address. It has no license file. The site's description is "macOS voice-to-text app, plugin-friendly" (owner, 2026-10-27).
 
 
 ## Brand Commitments
@@ -77,7 +77,7 @@ The owner confirmed the site's descriptions and start months for these two proje
 | TweakIdea | Agent skill that researches a startup idea and scores it 1–5 across 14 dimensions, with a GO / PIVOT / STOP verdict and an HTML report. Works in Claude Code, Codex, and Cursor. | Shipped. 11 releases, v3.0.1 on npm. 55 stars, MIT. | `npx skills add eph5xx/tweakidea` | github.com/eph5xx/tweakidea | 04.2026 |
 | Surf Skills | Curated directory of open-source AI agent skills, each with a preview video of its output. | Live, free. About 41 skills in 26 collections. MIT (logos and screenshots excluded). | Visit the site | surfskills.surf | 06.2026 |
 | Tiebreaker | Claude Code skill that settles a decision with a weighted scoring matrix. | Usable. No releases. 2 stars, MIT. | `npx skills add eph5xx/tiebreaker` | github.com/eph5xx/tiebreaker | 07.2026 |
-| Touchless | macOS menu-bar voice-to-text app (ElevenLabs or local Whisper) with a plugin system; one plugin so far. | Working but rough. No public release. No license. | Build from source | github.com/eph5xx/touchless | 07.2026 |
+| Touchless | macOS menu-bar voice-to-text app (ElevenLabs or local Whisper) with a plugin system; one plugin so far. | Working but rough. No public release. No license. | Build from source | github.com/eph5xx/touchless | 08.2026 |
 | Fjords | Agent that helps you achieve your goals (owner's description). Runs as a Telegram bot. | Early MVP; repo admits listed users, others get a waitlist | Open the bot | t.me/fjordsgoalbot | 05.2026 |
 
 ### Proof assets

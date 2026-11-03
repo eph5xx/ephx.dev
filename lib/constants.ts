@@ -55,14 +55,14 @@ export const PROJECTS: Project[] = [
     name: "Touchless",
     description: "macOS voice-to-text app, plugin-friendly.",
     url: "https://github.com/eph5xx/touchless",
-    date: "07.2026",
+    date: "08.2026",
   },
   {
     name: "Biviu",
     description:
       "Web research engine that finds, enriches and ranks any entities. Waitlist-only.",
     url: "https://biviu.com",
-    date: "11.2026",
+    date: "09.2026",
   },
 ];
 
