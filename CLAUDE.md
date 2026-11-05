@@ -1,6 +1,6 @@
 # ephx.dev
 
-Personal website with a single-column home page (hero, About, Projects, Background, Links). Legacy articles are hand-crafted React pages (not markdown/CMS) that stay reachable at `/a/[slug]` but are not listed anywhere on the site.
+Personal website with a single-column home page (hero, About, Background, Projects, Links). Legacy articles are hand-crafted React pages (not markdown/CMS) that stay reachable at `/a/[slug]` but are not listed anywhere on the site.
 
 ## Commands
 
@@ -32,7 +32,7 @@ instrumentation-client.ts  PostHog init (home page only, PostHog defaults) + out
 app/
   layout.tsx            Root layout: fonts, system theme, max-w-3xl column, SiteFooter
   fonts.ts              IBM Plex Sans + IBM Plex Mono (next/font/google)
-  page.tsx              Home page: hero, About, Projects, Background, Links
+  page.tsx              Home page: hero, About, Background, Projects, Links
   globals.css           Tailwind v4 CSS-first config (@theme), OKLCH palette, .reveal animation
   a/[slug]/page.tsx     Article route: generateStaticParams + generateMetadata
   not-found.tsx         404
