@@ -87,19 +87,6 @@ export default async function HomePage() {
         </div>
       </Section>
 
-      <Section title="Projects" id="projects">
-        <ul className="grid gap-3 md:grid-cols-2">
-          {PROJECTS.map((project, i) => (
-            <ProjectRow
-              key={project.name}
-              project={project}
-              index={i}
-              stars={stars[i]}
-            />
-          ))}
-        </ul>
-      </Section>
-
       <Section title="Background" id="background">
         <div className="text-body flex flex-col gap-4 text-base leading-relaxed text-pretty">
           <p>
@@ -116,6 +103,19 @@ export default async function HomePage() {
             <strong className={entity}>Yandex School of Data Analysis</strong>.
           </p>
         </div>
+      </Section>
+
+      <Section title="Projects" id="projects">
+        <ul className="grid gap-3 md:grid-cols-2">
+          {PROJECTS.map((project, i) => (
+            <ProjectRow
+              key={project.name}
+              project={project}
+              index={i}
+              stars={stars[i]}
+            />
+          ))}
+        </ul>
       </Section>
 
       <Section title="Links" id="links">
