@@ -14,9 +14,8 @@ function displayUrl(url: string) {
 
 /**
  * A card: icon, name with start month, and chip on top, then the description,
- * then the address the card opens. Featured projects get a blue background.
- * The name's link stretches over the whole card. `stars` is the build-time
- * count for the `starsRepo` chip.
+ * then the address the card opens. The name's link stretches over the whole
+ * card. `stars` is the build-time count for the `starsRepo` chip.
  */
 export function ProjectRow({
   project,
@@ -29,12 +28,7 @@ export function ProjectRow({
 }) {
   return (
     <li
-      className={cn(
-        "reveal group relative flex list-none flex-col gap-3 rounded-lg p-4 transition-colors",
-        project.featured
-          ? "bg-accent/12 hover:bg-accent/20"
-          : "bg-foreground/5 hover:bg-foreground/10"
-      )}
+      className="reveal group bg-foreground/5 hover:bg-foreground/10 relative flex list-none flex-col gap-3 rounded-lg p-4 transition-colors"
       style={{ "--i": index } as CSSProperties}
     >
       <div className="flex items-center gap-3">

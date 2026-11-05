@@ -19,8 +19,6 @@ export interface Project {
   icon?: string;
   /** The icon is an opaque square that fills its tile, with no white margin */
   iconFillsSquare?: boolean;
-  /** The owner's most important projects: blue card background */
-  featured?: boolean;
   /** Fixed accomplishment shown as a chip */
   chip?: string;
   /** "owner/name" of the repo whose live star count is shown as a chip */
@@ -41,7 +39,6 @@ export const PROJECTS: Project[] = [
     description: "Skill that scores startup ideas.",
     url: "https://github.com/eph5xx/tweakidea",
     date: "04.2026",
-    featured: true,
     starsRepo: "eph5xx/tweakidea",
   },
   {
@@ -58,7 +55,6 @@ export const PROJECTS: Project[] = [
     url: "https://surfskills.surf",
     date: "06.2026",
     icon: "/projects/surf-skills.png",
-    featured: true,
     chip: "47 videos",
   },
   {
@@ -81,7 +77,6 @@ export const PROJECTS: Project[] = [
     url: "https://biviu.com",
     date: "09.2026",
     icon: "/projects/biviu.svg",
-    featured: true,
     chip: "Main focus",
   },
 ];
