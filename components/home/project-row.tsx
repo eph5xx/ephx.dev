@@ -1,6 +1,11 @@
 import type { CSSProperties } from "react";
+import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
+import { chipClass } from "@/components/home/chip";
+import { LiveStars } from "@/components/home/live-stars";
+import { GitHubIcon } from "@/components/icons/github";
 import type { Project } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 /** "https://t.me/fjordsgoalbot" -> "t.me/fjordsgoalbot" */
 function displayUrl(url: string) {
@@ -8,42 +13,76 @@ function displayUrl(url: string) {
 }
 
 /**
- * Two lines on a two-column grid: name and description, then date and the
- * address the row opens. Phones stack it as name and date, description,
- * address. The name's link stretches over the whole row.
+ * A card: icon, name with start month, and chip on top, then the description,
+ * then the address the card opens. Featured projects get a blue background.
+ * The name's link stretches over the whole card. `stars` is the build-time
+ * count for the `starsRepo` chip.
  */
 export function ProjectRow({
   project,
   index,
+  stars,
 }: {
   project: Project;
   index: number;
+  stars: number | null;
 }) {
   return (
     <li
-      data-hover-item
-      className="reveal group relative -mx-2 grid list-none grid-cols-[1fr_auto] items-baseline gap-x-4 gap-y-1 rounded-md px-2 py-2 md:grid-cols-[6.5rem_1fr] md:gap-x-6"
+      className={cn(
+        "reveal group relative flex list-none flex-col gap-3 rounded-lg p-4 transition-colors",
+        project.featured
+          ? "bg-accent/12 hover:bg-accent/20"
+          : "bg-foreground/5 hover:bg-foreground/10"
+      )}
       style={{ "--i": index } as CSSProperties}
     >
-      <a
-        href={project.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="text-foreground focus-visible:after:outline-ring text-base font-medium outline-none after:absolute after:inset-0 after:rounded-md focus-visible:after:outline-2"
-      >
-        {project.name}
-      </a>
-      <span className="text-muted-foreground justify-self-end font-mono text-sm tabular-nums md:row-start-2 md:justify-self-start">
-        {project.date}
-      </span>
-      <p className="text-body col-span-2 text-base text-pretty md:col-span-1 md:col-start-2 md:row-start-1">
+      <div className="flex items-center gap-3">
+        {/* Same white square in both themes, so every icon is the same size */}
+        <span className="flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-white ring-1 ring-black/10">
+          {project.icon ? (
+            <Image
+              src={project.icon}
+              alt=""
+              width={80}
+              height={80}
+              className={cn(
+                "object-contain",
+                project.iconFillsSquare ? "size-full" : "size-8"
+              )}
+            />
+          ) : (
+            <GitHubIcon className="size-8 text-black" aria-hidden="true" />
+          )}
+        </span>
+        <div className="flex min-w-0 flex-1 flex-wrap items-center justify-between gap-x-3 gap-y-1">
+          <div className="flex flex-col">
+            <a
+              href={project.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-foreground focus-visible:after:outline-ring text-base leading-snug font-semibold outline-none after:absolute after:inset-0 after:rounded-lg focus-visible:after:outline-2"
+            >
+              {project.name}
+            </a>
+            <span className="text-body font-mono text-sm leading-snug tabular-nums">
+              {project.date}
+            </span>
+          </div>
+          {project.chip && <span className={chipClass}>{project.chip}</span>}
+          {project.starsRepo && (
+            <LiveStars repo={project.starsRepo} initial={stars} />
+          )}
+        </div>
+      </div>
+      <p className="text-foreground text-base text-pretty">
         {project.description}
       </p>
-      <span className="text-muted-foreground group-hover:text-foreground col-span-2 inline-flex items-center gap-1 justify-self-start font-mono text-sm transition-colors md:col-span-1 md:col-start-2 md:row-start-2">
-        <span className="underline decoration-current/40 underline-offset-4 group-hover:decoration-current">
+      <span className="text-body mt-auto inline-flex min-w-0 items-center gap-1 font-mono text-sm">
+        <span className="truncate group-hover:underline group-hover:underline-offset-4">
           {displayUrl(project.url)}
         </span>
-        <ArrowUpRight className="size-3.5" aria-hidden="true" />
+        <ArrowUpRight className="size-3.5 shrink-0" aria-hidden="true" />
       </span>
     </li>
   );

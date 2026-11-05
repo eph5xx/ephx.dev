@@ -39,7 +39,7 @@ app/
   sitemap.ts            Dynamic sitemap (home + articles)
 components/
   layout/               site-footer
-  home/                 section, hover-list (sliding highlight), project-row, list-row
+  home/                 section, hover-list (sliding highlight), project-row, chip, live-stars, list-row
   articles/             article-header, reading-progress
   articles/content/     Per-article content components (one .tsx per article)
   ui/                   shadcn/ui + Magic UI components (button, sheet, etc.)
@@ -48,6 +48,7 @@ components/
 lib/
   articles.ts           Article registry + content loader map — SINGLE SOURCE OF TRUTH
   constants.ts          SITE_NAME + home page data: PROFILE, PROJECTS, SOCIAL, LINKS
+  github-stars.ts       GitHub star count (fetched at build time and refreshed in the browser)
   utils.ts              cn() utility (clsx + twMerge)
 ```
 
@@ -67,7 +68,7 @@ That's it. Routing (`/a/my-slug`), metadata, OG tags, and sitemap derive from th
 
 ## Updating Home Page Content
 
-- Projects (oldest first; each shows its URL) and Links: edit the arrays in `lib/constants.ts`
+- Projects (oldest first; each shows its URL, icon, and optional chips) and Links: edit the arrays in `lib/constants.ts`; project icons live in `public/projects/`
 - Tagline and description: `PROFILE` in `lib/constants.ts`
 - About and Background paragraphs: hand-written JSX in `app/page.tsx`
 
