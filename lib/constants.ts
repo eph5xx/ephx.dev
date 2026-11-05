@@ -15,6 +15,16 @@ export interface Project {
   url: string;
   /** Start month, formatted as MM.YYYY */
   date: string;
+  /** Path under public/; projects without one show the GitHub icon */
+  icon?: string;
+  /** The icon is an opaque square that fills its tile, with no white margin */
+  iconFillsSquare?: boolean;
+  /** The owner's most important projects: blue card background */
+  featured?: boolean;
+  /** Fixed accomplishment shown as a chip */
+  chip?: string;
+  /** "owner/name" of the repo whose live star count is shown as a chip */
+  starsRepo?: string;
 }
 
 export interface ProfileLink {
@@ -28,41 +38,51 @@ export interface ProfileLink {
 export const PROJECTS: Project[] = [
   {
     name: "TweakIdea",
-    description:
-      "Agent skill that scores a startup idea and suggests the next steps.",
+    description: "Skill that scores startup ideas.",
     url: "https://github.com/eph5xx/tweakidea",
     date: "04.2026",
+    featured: true,
+    starsRepo: "eph5xx/tweakidea",
   },
   {
     name: "Fjords",
-    description: "Agent that helps you achieve your goals.",
+    description: "Agent that helps you achieve goals.",
     url: "https://t.me/fjordsgoalbot",
     date: "05.2026",
+    icon: "/projects/fjords.jpg",
+    iconFillsSquare: true,
   },
   {
     name: "Surf Skills",
-    description: "Directory of AI agent skills with video previews.",
+    description: "Directory of agent skills with videos.",
     url: "https://surfskills.surf",
     date: "06.2026",
+    icon: "/projects/surf-skills.png",
+    featured: true,
+    chip: "47 videos",
   },
   {
     name: "Tiebreaker",
-    description: "Agent skill that helps agents make well-reasoned decisions.",
+    description: "Skill for well-reasoned decisions.",
     url: "https://github.com/eph5xx/tiebreaker",
     date: "07.2026",
   },
   {
     name: "Touchless",
-    description: "macOS voice-to-text app, plugin-friendly.",
+    description: "macOS voice-to-text app with plugins.",
     url: "https://github.com/eph5xx/touchless",
     date: "08.2026",
+    icon: "/projects/touchless.png",
+    iconFillsSquare: true,
   },
   {
     name: "Biviu",
-    description:
-      "Web research engine that finds, enriches and ranks any entities. Waitlist-only.",
+    description: "Tool that finds and ranks any entities.",
     url: "https://biviu.com",
     date: "09.2026",
+    icon: "/projects/biviu.svg",
+    featured: true,
+    chip: "Main focus",
   },
 ];
 

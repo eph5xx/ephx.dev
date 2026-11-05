@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="731.85" height="483.975" viewBox="143.575 243.575 731.85 483.975">
+  <defs>
+    <clipPath id="rounded-top-clip">
+      <path d="M181 444 491 278Q512 267 532 278L843 454Q864 466 843 479L529 645Q506 658 484 645L181 472Q157 458 181 444Z"/>
+    </clipPath>
+  </defs>
+  <g id="isometric-nine-tile-board" stroke-linejoin="round">
+    <g id="raised-board-sides">
+      <path id="left-facing-side" d="M165 456Q165 449 180 444L507 630 507 710Q493 711 481 704L179 528Q165 521 165 508Z" fill="#065F46"/>
+      <path id="right-facing-side" d="M507 630 843 454Q857 459 858 470L858 510Q858 521 846 528L529 704Q519 710 507 710Z" fill="#065F46"/>
+      <path id="front-corner-highlight" d="M502 650Q505 651 509 651L509 709 503 709Z" fill="#059669" opacity="0.48"/>
+      <path id="right-upper-edge-shading" d="M528 645 851 474 851 483 529 655Q518 661 509 661L509 651Q519 650 528 645Z" fill="#065F46" opacity="0.19"/>
+    </g>
+    <g id="tiled-top">
+      <path id="white-top-surface" d="M181 444 491 278Q512 267 532 278L843 454Q864 466 843 479L529 645Q506 658 484 645L181 472Q157 458 181 444Z" fill="#FFFFFF"/>
+      <g id="top-tiles-and-seams" clip-path="url(#rounded-top-clip)">
+        <path id="three-green-tiles" d="M161 452 510 261 624 330 265 519 161 461Z" fill="#059669"/>
+        <g id="green-grid-lines" fill="none" stroke="#006e51" stroke-width="7">
+          <path id="first-descending-divider" d="M287 389 631 592" stroke="#047857"/>
+          <path id="second-descending-divider" d="M396 330 749 530" stroke="#047857"/>
+          <path id="green-white-divider" d="M264 519 624 330" stroke="#047857"/>
+          <path id="white-row-divider" d="M375 583 732 392" stroke="#047857"/>
+        </g>
+      </g>
+      <path id="continuous-top-rim" d="M181 444 491 278Q512 267 532 278L843 454Q864 466 843 479L529 645Q506 658 484 645L181 472Q157 458 181 444Z" fill="none" stroke="#047857" stroke-width="7"/>
+      <path id="left-rounded-rim-highlight" d="M181 446Q163 458 183 470L264 517" fill="none" stroke="#059669" stroke-width="3" opacity="0.55" stroke-linecap="round"/>
+      <path id="front-rim-highlight" d="M379 586 485 647Q506 659 529 647L630 593" fill="none" stroke="#059669" stroke-width="2.5" opacity="0.6"/>
+    </g>
+  </g>
+</svg>

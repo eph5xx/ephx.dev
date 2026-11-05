@@ -6,6 +6,7 @@ import { ListRow } from "@/components/home/list-row";
 import { ProjectRow } from "@/components/home/project-row";
 import { Section } from "@/components/home/section";
 import { LINKS, PROFILE, PROJECTS, SOCIAL } from "@/lib/constants";
+import { fetchStars } from "@/lib/github-stars";
 
 export const metadata: Metadata = {
   title: { absolute: PROFILE.name },
@@ -17,7 +18,16 @@ const entity = "text-foreground font-semibold";
 const proseLink =
   "text-foreground decoration-foreground/30 hover:decoration-foreground underline underline-offset-4 transition-colors";
 
-export default function HomePage() {
+export default async function HomePage() {
+  // One build-time lookup per repo; force-cache keeps the page static.
+  const stars = await Promise.all(
+    PROJECTS.map((project) =>
+      project.starsRepo
+        ? fetchStars(project.starsRepo, { cache: "force-cache" })
+        : null
+    )
+  );
+
   return (
     <div className="flex flex-col gap-12 px-4 md:px-6">
       <section
@@ -78,11 +88,16 @@ export default function HomePage() {
       </Section>
 
       <Section title="Projects" id="projects">
-        <HoverList>
+        <ul className="grid gap-3 md:grid-cols-2">
           {PROJECTS.map((project, i) => (
-            <ProjectRow key={project.name} project={project} index={i} />
+            <ProjectRow
+              key={project.name}
+              project={project}
+              index={i}
+              stars={stars[i]}
+            />
           ))}
-        </HoverList>
+        </ul>
       </Section>
 
       <Section title="Background" id="background">
