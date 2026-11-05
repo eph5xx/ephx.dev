@@ -3,7 +3,7 @@
 // to PostHog's US cluster. Forwards the visitor IP as x-forwarded-for so
 // PostHog's GeoIP can find the visitor's location (the project discards the
 // IP after GeoIP). Strips cookies, auth, Cloudflare headers, and PostHog's
-// set-cookie response.
+// set-cookie response (posthog-js sets its own cookie in the browser).
 //
 // Source: CONTEXT.md D-17, D-19
 // Source: RESEARCH.md §Pattern 3, §Pitfall 2, §Pitfall 6
@@ -65,7 +65,7 @@ async function relay(
 
   const upstream = await fetch(upstreamUrl.toString(), init);
 
-  // The site is cookieless; never let PostHog set one through our origin.
+  // posthog-js manages its cookie client-side; don't let the server set others.
   const responseHeaders = new Headers(upstream.headers);
   responseHeaders.delete("set-cookie");
 

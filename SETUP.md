@@ -73,8 +73,8 @@ you'd need to delete old logs or upgrade).
 
 ## 3. Create the PostHog project
 
-Analytics run on the home page (`/`) only, with memory persistence (no
-cookies or browser storage). They are set
+Analytics run on the home page (`/`) only, with PostHog's default
+settings (a visitor cookie and session recording). They are set
 up in `instrumentation-client.ts` and sent through the `/_relay` proxy to
 PostHog US. Articles, the 404 page, and `/reports/*` send nothing.
 
@@ -96,8 +96,8 @@ PostHog US. Articles, the 404 page, and `/reports/*` send nothing.
    missing, so Git builds break without it.
 6. Optional: in PostHog **Settings** → **Project**, turn on **Discard client
    IP data**. Events still get a country; the raw IP is just not stored.
-7. Under **Project Settings** → **Recordings**, confirm **Session Recording**
-   is OFF (it should be by default). The client also disables it.
+7. Under **Project Settings** → **Replay**, turn **Session Replay** ON and add
+   `https://ephx.dev` to the authorized domains. Keep input masking on.
 ---
 
 ## 4. Create the Anthropic API key

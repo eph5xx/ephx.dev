@@ -48,16 +48,13 @@ describe("instrumentation-client.ts", () => {
     document.body.innerHTML = "";
   });
 
-  it("initializes on / with the memory-persistence config", async () => {
+  it("initializes on / with the default config", async () => {
     await load("/");
     expect(initMock).toHaveBeenCalledTimes(1);
     expect(initMock).toHaveBeenCalledWith("phc_test_key", {
       api_host: "/_relay",
       ui_host: "https://us.posthog.com",
       defaults: "2026-01-30",
-      persistence: "memory",
-      person_profiles: "never",
-      disable_session_recording: true,
     });
   });
 
