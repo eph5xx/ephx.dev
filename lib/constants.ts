@@ -97,6 +97,16 @@ export const SOCIAL = {
     handle: "eph5xx",
     href: "https://x.com/eph5xx",
   },
+  cal: {
+    prefix: "cal.com/",
+    handle: "eph5xx",
+    href: "https://cal.com/eph5xx",
+  },
 } satisfies Record<string, ProfileLink>;
 
-export const LINKS: ProfileLink[] = [SOCIAL.github, SOCIAL.linkedin, SOCIAL.x];
+export const LINKS: ProfileLink[] = [
+  SOCIAL.github,
+  SOCIAL.linkedin,
+  SOCIAL.x,
+  SOCIAL.cal,
+];
