@@ -16,7 +16,7 @@ Personal website with a single-column home page (hero, About, Background, Projec
 ## Constraints
 
 - **Cloudflare Workers** via OpenNext (`output: 'standalone'` in next.config.ts)
-- **System theme** — follows the system light/dark setting via `prefers-color-scheme`, with the light palette in `:root` and the dark palette in a media query
+- **Light theme only** — one palette in `:root`, with no dark mode and no `dark:` classes. The standalone pages in `public/reports/` keep their own themes
 - Each article = custom React component (no markdown, no MDX, no CMS)
 - Mobile-responsive required
 - One `max-w-3xl` column for every page (home, articles, footer); blocks inside it use `px-4 md:px-6`. No site header: pages start with their own content
@@ -30,7 +30,7 @@ open-next.config.ts   OpenNext configuration (incremental cache, cache intercept
 wrangler.jsonc        Cloudflare Workers config (entry point, assets, compat flags)
 instrumentation-client.ts  PostHog init (home page only, PostHog defaults) + outbound link event
 app/
-  layout.tsx            Root layout: fonts, system theme, max-w-3xl column, SiteFooter
+  layout.tsx            Root layout: fonts, max-w-3xl column, SiteFooter
   fonts.ts              IBM Plex Sans + IBM Plex Mono (next/font/google)
   page.tsx              Home page: hero, About, Background, Projects, Links
   globals.css           Tailwind v4 CSS-first config (@theme), OKLCH palette, .reveal animation
