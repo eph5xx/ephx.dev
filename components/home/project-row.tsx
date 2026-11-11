@@ -3,6 +3,7 @@ import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 import { chipClass } from "@/components/home/chip";
 import { LiveStars } from "@/components/home/live-stars";
+import { LiveVideos } from "@/components/home/live-videos";
 import { GitHubIcon } from "@/components/icons/github";
 import type { Project } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -16,15 +17,18 @@ function displayUrl(url: string) {
  * A card: icon, name with start month, and chip on top, then the description,
  * then the address the card opens. The name's link stretches over the whole
  * card. `stars` is the build-time count for the `starsRepo` chip.
+ * `videos` is the build-time count for the `videosStats` chip.
  */
 export function ProjectRow({
   project,
   index,
   stars,
+  videos,
 }: {
   project: Project;
   index: number;
   stars: number | null;
+  videos: number | null;
 }) {
   return (
     <li
@@ -66,6 +70,9 @@ export function ProjectRow({
           {project.chip && <span className={chipClass}>{project.chip}</span>}
           {project.starsRepo && (
             <LiveStars repo={project.starsRepo} initial={stars} />
+          )}
+          {project.videosStats && (
+            <LiveVideos url={project.videosStats} initial={videos} />
           )}
         </div>
       </div>

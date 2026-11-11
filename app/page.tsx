@@ -7,6 +7,7 @@ import { ProjectRow } from "@/components/home/project-row";
 import { Section } from "@/components/home/section";
 import { LINKS, PROFILE, PROJECTS, SOCIAL } from "@/lib/constants";
 import { fetchStars } from "@/lib/github-stars";
+import { fetchVideoCount } from "@/lib/surf-stats";
 
 export const metadata: Metadata = {
   title: { absolute: PROFILE.name },
@@ -19,14 +20,23 @@ const proseLink =
   "text-foreground decoration-foreground/30 hover:decoration-foreground underline underline-offset-4 transition-colors";
 
 export default async function HomePage() {
-  // One build-time lookup per repo; force-cache keeps the page static.
-  const stars = await Promise.all(
-    PROJECTS.map((project) =>
-      project.starsRepo
-        ? fetchStars(project.starsRepo, { cache: "force-cache" })
-        : null
-    )
-  );
+  // One build-time lookup per live chip; force-cache keeps the page static.
+  const [stars, videos] = await Promise.all([
+    Promise.all(
+      PROJECTS.map((project) =>
+        project.starsRepo
+          ? fetchStars(project.starsRepo, { cache: "force-cache" })
+          : null
+      )
+    ),
+    Promise.all(
+      PROJECTS.map((project) =>
+        project.videosStats
+          ? fetchVideoCount(project.videosStats, { cache: "force-cache" })
+          : null
+      )
+    ),
+  ]);
 
   return (
     <div className="flex flex-col gap-12 px-4 md:px-6">
@@ -113,6 +123,7 @@ export default async function HomePage() {
               project={project}
               index={i}
               stars={stars[i]}
+              videos={videos[i]}
             />
           ))}
         </ul>

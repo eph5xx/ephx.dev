@@ -23,6 +23,8 @@ export interface Project {
   chip?: string;
   /** "owner/name" of the repo whose live star count is shown as a chip */
   starsRepo?: string;
+  /** stats.json URL whose `videos` count is shown as a chip */
+  videosStats?: string;
 }
 
 export interface ProfileLink {
@@ -55,7 +57,7 @@ export const PROJECTS: Project[] = [
     url: "https://surfskills.surf",
     date: "06.2026",
     icon: "/projects/surf-skills.png",
-    chip: "47 videos",
+    videosStats: "https://surfskills.surf/stats.json",
   },
   {
     name: "Tiebreaker",
